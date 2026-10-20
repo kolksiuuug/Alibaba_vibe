@@ -1,0 +1,15 @@
+Flask
+gunicorn
+Flask-SQLAlchemy
+SQLAlchemy
+Flask-Migrate
+psycopg2-binary
+flask-smorest
+marshmallow
+apispec
+ollama
+httpx
+pytest
+pytest-flask
+python-dotenv
+Flask-CORS
