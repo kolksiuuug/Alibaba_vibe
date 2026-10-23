@@ -35,7 +35,11 @@ class ProblemSchema(Schema):
     detail = fields.String(metadata={"description": "Подробности для пользователя"})
     instance = fields.String(metadata={"description": "Путь запроса"})
     code = fields.String(metadata={"description": "Машинный код ошибки"})
-    errors = fields.Dict(metadata={"description": "Ошибки валидации по полям"})
+    errors = fields.Dict(
+        keys=fields.String(),
+        values=fields.Raw(),
+        metadata={"description": "Ошибки валидации по полям"},
+    )
     request_id = fields.String(metadata={"description": "Идентификатор запроса для поиска в логах"})
 
 

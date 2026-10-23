@@ -572,6 +572,7 @@ components:
         errors:
           type: object
           description: Ошибки валидации по полям
+          additionalProperties: {}
         request_id:
           type: string
           description: Идентификатор запроса для поиска в логах
@@ -962,6 +963,7 @@ components:
           - expansion
         form_data:
           type: object
+          additionalProperties: {}
       required:
       - amount
       - product_code
@@ -1013,6 +1015,7 @@ components:
           $ref: '#/components/schemas/Company'
         form_data:
           type: object
+          additionalProperties: {}
         pipeline_steps:
           type: array
           items:
@@ -1128,6 +1131,7 @@ components:
             $ref: '#/components/schemas/LabelledField'
         response:
           type: object
+          additionalProperties: {}
           nullable: true
         responded_at:
           type: string
@@ -1249,11 +1253,13 @@ components:
           - expansion
         form_data:
           type: object
+          additionalProperties: {}
     InfoResponse:
       type: object
       properties:
         answers:
           type: object
+          additionalProperties: {}
         comment:
           type: string
           default: null
@@ -1399,6 +1405,7 @@ components:
           description: ok | failed
         response:
           type: object
+          additionalProperties: {}
           nullable: true
         error:
           type: string

@@ -21,7 +21,7 @@ class ApplicationCreateSchema(Schema):
     amount = fields.Integer(required=True, validate=validate.Range(min=1))
     term_months = fields.Integer(required=True, validate=validate.Range(min=1, max=120))
     purpose = fields.String(required=True, validate=validate.OneOf(list(PURPOSES)))
-    form_data = fields.Dict(keys=fields.String(), load_default=dict)
+    form_data = fields.Dict(keys=fields.String(), values=fields.Raw(), load_default=dict)
 
 
 class ApplicationPatchSchema(Schema):
@@ -29,11 +29,11 @@ class ApplicationPatchSchema(Schema):
     amount = fields.Integer(validate=validate.Range(min=1))
     term_months = fields.Integer(validate=validate.Range(min=1, max=120))
     purpose = fields.String(validate=validate.OneOf(list(PURPOSES)))
-    form_data = fields.Dict(keys=fields.String())
+    form_data = fields.Dict(keys=fields.String(), values=fields.Raw())
 
 
 class InfoResponseSchema(Schema):
-    answers = fields.Dict(keys=fields.String(), load_default=dict)
+    answers = fields.Dict(keys=fields.String(), values=fields.Raw(), load_default=dict)
     comment = fields.String(allow_none=True, load_default=None)
 
 
@@ -68,7 +68,7 @@ class ApplicationSummarySchema(Schema):
 
 class ApplicationSchema(ApplicationSummarySchema):
     company = fields.Nested(CompanySchema, required=True)
-    form_data = fields.Dict(keys=fields.String(), required=True)
+    form_data = fields.Dict(keys=fields.String(), values=fields.Raw(), required=True)
     pipeline_steps = fields.List(fields.Nested(StepSchema), required=True)
     submitted_at = fields.DateTime(allow_none=True)
     updated_at = fields.DateTime(required=True)
@@ -103,7 +103,7 @@ class InfoRequestSchema(Schema):
     fields_ = fields.List(
         fields.Nested(LabelledFieldSchema), required=True, data_key="fields", attribute="fields"
     )
-    response = fields.Dict(allow_none=True)
+    response = fields.Dict(keys=fields.String(), values=fields.Raw(), allow_none=True)
     responded_at = fields.DateTime(allow_none=True)
     created_at = fields.DateTime(required=True)
 

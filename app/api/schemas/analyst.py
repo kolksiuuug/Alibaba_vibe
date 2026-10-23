@@ -31,7 +31,7 @@ class QueueItemSchema(Schema):
 class CheckSchema(Schema):
     source = fields.String(required=True, metadata={"description": "bki | egrul | fns"})
     status = fields.String(required=True, metadata={"description": "ok | failed"})
-    response = fields.Dict(allow_none=True)
+    response = fields.Dict(keys=fields.String(), values=fields.Raw(), allow_none=True)
     error = fields.String(allow_none=True)
     checked_at = fields.DateTime(required=True)
 
