@@ -1,0 +1,8 @@
+# LF в репозитории и при checkout на любой ОС.
+# Без этого на Windows (core.autocrlf=true) entrypoint.sh получит CRLF и контейнер не стартует.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff2 binary

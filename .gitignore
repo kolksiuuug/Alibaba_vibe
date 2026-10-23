@@ -1,13 +1,35 @@
+# Python
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 .coverage
 htmlcov/
-.env
 .venv/
 venv/
 instance/
 *.sqlite3
+
+# Секреты: в репозитории только .env.example
+.env
+.env.*
+!.env.example
+
+# Frontend
+node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
+frontend/playwright/.cache/
+
+# Claude Code и исходники плагина everything-claude-code (CLAUDE.md, раздел 16)
+.claude/settings.local.json
+.claude/plans/
+everything-claude-code/
+
+# IDE и ОС
 .DS_Store
 .idea/
 .vscode/
