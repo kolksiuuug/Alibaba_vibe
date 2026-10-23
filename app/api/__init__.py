@@ -9,6 +9,7 @@ import logging
 from flask import Flask, Response
 
 from app.api.problem import PROBLEM_MIMETYPE, ProblemApi, problem_response
+from app.domain.errors import DomainError
 
 __all__ = ["PROBLEM_MIMETYPE", "ProblemApi", "problem_response", "register_api"]
 
@@ -21,6 +22,10 @@ def register_api(app: Flask) -> None:
 
     api.init_app(app)
     api.register_blueprint(health_blp)
+
+    @app.errorhandler(DomainError)
+    def handle_domain_error(error: DomainError) -> Response:
+        return problem_response(error.status, error.message, code=error.code)
 
     @app.errorhandler(Exception)
     def handle_unexpected_error(error: Exception) -> Response:

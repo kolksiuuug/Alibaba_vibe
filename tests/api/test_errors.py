@@ -7,8 +7,9 @@ from app.domain.errors import CommentRequired, InvalidTransition
 
 
 def test_invalid_transition_is_409_problem(app: Flask) -> None:
+    error = InvalidTransition("Переход issued -> draft недопустим")
     with app.test_request_context("/api/v1/applications/1/submit", method="POST"):
-        response = app.handle_user_exception(InvalidTransition("Переход issued -> draft недопустим"))
+        response = app.handle_user_exception(error)
 
     assert response.status_code == 409
     assert response.mimetype == PROBLEM_MIMETYPE
