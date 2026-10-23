@@ -1,0 +1,4 @@
+# Генерируется из docs/openapi.yaml (npm run gen:api)
+src/api/schema.d.ts
+dist
+node_modules

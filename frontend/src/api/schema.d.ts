@@ -1009,7 +1009,9 @@ export interface components {
             /** @description Машинный код ошибки */
             code?: string;
             /** @description Ошибки валидации по полям */
-            errors?: Record<string, never>;
+            errors?: {
+                [key: string]: unknown;
+            };
             /** @description Идентификатор запроса для поиска в логах */
             request_id?: string;
         };
@@ -1159,7 +1161,9 @@ export interface components {
             term_months: number;
             /** @enum {string} */
             purpose: "working_capital" | "equipment" | "cash_gap" | "expansion";
-            form_data?: Record<string, never>;
+            form_data?: {
+                [key: string]: unknown;
+            };
         };
         Step: {
             code: string;
@@ -1183,7 +1187,9 @@ export interface components {
             /** Format: date-time */
             status_changed_at: string;
             company: components["schemas"]["Company"];
-            form_data: Record<string, never>;
+            form_data: {
+                [key: string]: unknown;
+            };
             pipeline_steps: components["schemas"]["Step"][];
             /** Format: date-time */
             submitted_at?: string | null;
@@ -1221,7 +1227,9 @@ export interface components {
             requested_by: string;
             message: string;
             fields: components["schemas"]["LabelledField"][];
-            response?: Record<string, never> | null;
+            response?: {
+                [key: string]: unknown;
+            } | null;
             /** Format: date-time */
             responded_at?: string | null;
             /** Format: date-time */
@@ -1264,10 +1272,14 @@ export interface components {
             term_months?: number;
             /** @enum {string} */
             purpose?: "working_capital" | "equipment" | "cash_gap" | "expansion";
-            form_data?: Record<string, never>;
+            form_data?: {
+                [key: string]: unknown;
+            };
         };
         InfoResponse: {
-            answers?: Record<string, never>;
+            answers?: {
+                [key: string]: unknown;
+            };
             /** @default null */
             comment: string | null;
         };
@@ -1327,7 +1339,9 @@ export interface components {
             source: string;
             /** @description ok | failed */
             status: string;
-            response?: Record<string, never> | null;
+            response?: {
+                [key: string]: unknown;
+            } | null;
             error?: string | null;
             /** Format: date-time */
             checked_at: string;

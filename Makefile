@@ -5,7 +5,7 @@ PY_IMAGE := python:3.12.15-slim-bookworm
 PIP_TOOLS := pip-tools==7.6.2
 PIP_COMPILE := pip-compile -q --generate-hashes --strip-extras --allow-unsafe
 
-.PHONY: up down logs test seed openapi lock
+.PHONY: up down logs test e2e seed openapi lock
 
 up:
 	$(COMPOSE) up --build -d
@@ -18,6 +18,11 @@ logs:
 
 test:
 	$(COMPOSE) run --rm --build app pytest
+
+# UI-сценарии против поднятого стека (make up). Нужен браузер: npx playwright install chromium
+# или установленный Edge/Chrome: E2E_BROWSER_CHANNEL=msedge make e2e
+e2e:
+	cd frontend && npm ci && npx playwright test
 
 seed:
 	$(COMPOSE) run --rm app flask seed --reset

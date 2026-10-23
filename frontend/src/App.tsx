@@ -1,32 +1,61 @@
-import { useQuery } from "@tanstack/react-query";
+import { Navigate, Route, Routes } from "react-router-dom";
 
-async function isApiAlive(): Promise<boolean> {
-  const response = await fetch("/api/health");
-  return response.ok;
-}
+import { RequireAuth } from "./components/common";
+import { Layout } from "./components/Layout";
+import { CardPage } from "./pages/analyst/CardPage";
+import { QueuePage } from "./pages/analyst/QueuePage";
+import { ApplicationPage } from "./pages/client/ApplicationPage";
+import { HomePage } from "./pages/client/HomePage";
+import { NewApplicationPage } from "./pages/client/NewApplicationPage";
+import { LoginPage } from "./pages/LoginPage";
 
 export function App() {
-  const health = useQuery({ queryKey: ["health"], queryFn: isApiAlive });
-
-  let apiState = "проверяем…";
-  if (health.isError || health.data === false) apiState = "недоступно";
-  else if (health.data) apiState = "работает";
-
   return (
-    <main
-      style={{
-        fontFamily: "system-ui, sans-serif",
-        maxWidth: 720,
-        margin: "48px auto",
-        padding: "0 16px",
-      }}
-    >
-      <h1>Умный кредитный кабинет предпринимателя</h1>
-      <p>Прототип для хакатона. Все данные синтетические.</p>
-      <p>Состояние API: {apiState}</p>
-      <p>
-        <a href="/api/docs">Документация API (Swagger)</a>
-      </p>
-    </main>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/"
+          element={
+            <RequireAuth role="client">
+              <HomePage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/new"
+          element={
+            <RequireAuth role="client">
+              <NewApplicationPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/applications/:id"
+          element={
+            <RequireAuth role="client">
+              <ApplicationPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/analyst"
+          element={
+            <RequireAuth role="analyst">
+              <QueuePage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/analyst/applications/:id"
+          element={
+            <RequireAuth role="analyst">
+              <CardPage />
+            </RequireAuth>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    </Routes>
   );
 }

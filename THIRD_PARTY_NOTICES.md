@@ -46,6 +46,9 @@ Flask 3.1.2 (BSD-3-Clause) и gunicorn 23.0.0 (MIT) с теми же транз�
 | react, react-dom | 18.3.1 | MIT | SPA в браузере |
 | react-router-dom | 6.30.6 | MIT | маршрутизация SPA |
 | @tanstack/react-query | 5.104.5 | MIT | запросы к API, опрос статуса |
+| @mantine/core, @mantine/hooks | 7.17.8 | MIT | UI-компоненты: формы, таблицы, таймлайн, модальные окна |
+| @tabler/icons-react | 3.49.0 | MIT | иконки интерфейса |
+| @playwright/test | 1.64.1 | Apache-2.0 | UI-сценарии `frontend/e2e/` (только devDependencies, в образ не попадает) |
 | swagger-ui-dist | 5.34.0 | Apache-2.0 | ассеты Swagger UI на `/api/docs`, отдаются nginx без внешних CDN |
 | vite | 8.3.5 | MIT | сборка (только стадия сборки образа) |
 | @vitejs/plugin-react | 6.1.2 | MIT | сборка |
@@ -53,6 +56,8 @@ Flask 3.1.2 (BSD-3-Clause) и gunicorn 23.0.0 (MIT) с теми же транз�
 | openapi-typescript | 7.13.0 | MIT | генерация типов API из `docs/openapi.yaml` |
 | prettier | 3.9.10 | MIT | форматирование |
 | @types/react, @types/react-dom | 18.3.x | MIT | типы |
+
+Транзитивные пакеты в браузере (зависимости Mantine): MIT (@floating-ui, react-remove-scroll и др.), 0BSD (tslib).
 
 Транзитивные пакеты сборки: MIT (большинство), MPL-2.0 (lightningcss — минификация CSS в Vite), Apache-2.0 (detect-libc, yaml-ast-parser, @scarf/scarf), ISC (minimatch, picocolors, yargs-parser), BSD-3-Clause (source-map-js), Python-2.0 (argparse), MIT OR CC0-1.0 (type-fest). Пакет `@scarf/scarf` приходит вместе с swagger-ui-dist и собирает телеметрию установки; она отключена (`scarfSettings` в `package.json` и `SCARF_ANALYTICS=false` в `nginx/Dockerfile`).
 
