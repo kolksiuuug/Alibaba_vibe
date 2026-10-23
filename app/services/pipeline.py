@@ -62,7 +62,6 @@ STEP_TITLES = {
 }
 STEP_CODES = tuple(STEP_TITLES)
 CHECK_SOURCES = ("egrul", "fns", "bki")
-ACTIVE_JOB_STATES = ("queued", "running")
 
 
 @dataclass(frozen=True)
@@ -86,13 +85,15 @@ class StepFailed(Exception):
 def enqueue_job(application: Application, kind: JobKind = JobKind.SCORING) -> PipelineJob:
     """Поставить задачу в очередь в текущей транзакции.
 
-    Активная задача того же вида переиспользуется: повторный submit не создаёт дубль.
+    Задача того же вида, ещё ждущая в очереди, переиспользуется: повторный submit не создаёт
+    дубль. Выполняемую задачу переиспользовать нельзя: она может быть уже на последнем шаге,
+    и новая работа (например, после ответа на дозапрос) иначе потеряется.
     """
     existing = db.session.scalars(
         select(PipelineJob).where(
             PipelineJob.application_id == application.id,
             PipelineJob.kind == kind.value,
-            PipelineJob.state.in_(ACTIVE_JOB_STATES),
+            PipelineJob.state == "queued",
         )
     ).first()
     if existing is not None:
@@ -354,7 +355,8 @@ def run_scoring(job: PipelineJob, ctx: PipelineContext) -> None:
             return
         _update_step(application, code, state="done", finished_at=_now_iso(), message=message)
         db.session.commit()
-        _pause(ctx)
+        if code != STEP_CODES[-1]:
+            _pause(ctx)
 
 
 def current_offer(application: Application) -> Decision | None:

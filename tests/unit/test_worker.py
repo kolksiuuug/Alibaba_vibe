@@ -177,8 +177,19 @@ def test_run_until_idle_processes_scoring_job(app: Flask, db: SQLAlchemy) -> Non
     assert run_until_idle(fake_context()) == 0
 
 
-def test_only_one_active_job_per_application_and_kind(db: SQLAlchemy) -> None:
+def test_only_one_queued_job_per_application_and_kind(db: SQLAlchemy) -> None:
     job = _queued(db)
     again = enqueue_job(job.application)
 
     assert again.id == job.id
+
+
+def test_new_job_is_queued_while_previous_run_is_finishing(db: SQLAlchemy) -> None:
+    """Регрессия: клиент ответил на дозапрос, пока воркер ещё закрывал прошлую задачу."""
+    running = _queued(db, state="running", attempts=1, heartbeat_at=NOW)
+
+    fresh = enqueue_job(running.application)
+    db.session.commit()
+
+    assert fresh.id != running.id
+    assert fresh.state == "queued"

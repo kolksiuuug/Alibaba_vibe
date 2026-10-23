@@ -19,13 +19,14 @@ class PipelineJob(db.Model):  # type: ignore[name-defined]
         CheckConstraint("state IN ('queued', 'running', 'done', 'failed')", name="state"),
         CheckConstraint("kind IN ('scoring', 'disbursement')", name="kind"),
         Index("ix_pipeline_jobs_ready", "state", "run_after"),
-        # Не больше одной активной задачи каждого вида на заявку: повторный submit не дублирует
+        # Не больше одной задачи каждого вида в очереди на заявку: повторный submit не дублирует.
+        # Выполняемая задача сюда не входит: пока воркер её закрывает, новая уже может встать в очередь.
         Index(
-            "uq_pipeline_jobs_active",
+            "uq_pipeline_jobs_queued",
             "application_id",
             "kind",
             unique=True,
-            postgresql_where=text("state IN ('queued', 'running')"),
+            postgresql_where=text("state = 'queued'"),
         ),
     )
 
