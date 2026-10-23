@@ -1,0 +1,58 @@
+[
+  {
+    "code": "turnover",
+    "name": "Оборотный кредит «Ритм»",
+    "description": "Пополнение оборотных средств: закупка товара и сырья, зарплата, аренда. Без залога при стабильных оборотах по счёту.",
+    "purposes": ["working_capital", "expansion"],
+    "min_amount": 300000,
+    "max_amount": 15000000,
+    "min_term_months": 6,
+    "max_term_months": 36,
+    "rate_spread": 4.5,
+    "requires_collateral": false,
+    "requires_guarantee": false,
+    "required_fields": []
+  },
+  {
+    "code": "equipment",
+    "name": "Инвестиционный кредит «Станок»",
+    "description": "Покупка оборудования, техники и транспорта. Приобретаемое имущество оформляется в залог, поэтому ставка ниже.",
+    "purposes": ["equipment"],
+    "min_amount": 500000,
+    "max_amount": 30000000,
+    "min_term_months": 12,
+    "max_term_months": 60,
+    "rate_spread": 3.0,
+    "requires_collateral": true,
+    "requires_guarantee": false,
+    "required_fields": ["collateral_description", "collateral_value", "equipment_supplier"]
+  },
+  {
+    "code": "express",
+    "name": "Экспресс-кредит «Быстрый старт»",
+    "description": "Небольшая сумма на любые цели бизнеса без залога и поручителей. Решение быстрее, ставка выше.",
+    "purposes": ["working_capital", "cash_gap", "expansion"],
+    "min_amount": 100000,
+    "max_amount": 3000000,
+    "min_term_months": 3,
+    "max_term_months": 24,
+    "rate_spread": 7.5,
+    "requires_collateral": false,
+    "requires_guarantee": false,
+    "required_fields": []
+  },
+  {
+    "code": "credit_line",
+    "name": "Кредитная линия «Запас»",
+    "description": "Деньги на кассовые разрывы и сезонные закупки: берёте частями в пределах лимита. Нужно поручительство собственника.",
+    "purposes": ["cash_gap", "working_capital"],
+    "min_amount": 1000000,
+    "max_amount": 20000000,
+    "min_term_months": 12,
+    "max_term_months": 36,
+    "rate_spread": 5.0,
+    "requires_collateral": false,
+    "requires_guarantee": true,
+    "required_fields": ["guarantor_full_name", "guarantor_inn"]
+  }
+]
