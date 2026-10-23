@@ -1,0 +1,103 @@
+# Запуск: docker compose up --build  ->  http://localhost:8080
+# Все переменные имеют значения по умолчанию, файл .env не нужен.
+name: credit-conveyor
+
+# app и worker собираются из одного Dockerfile (слои общие из кэша).
+# У каждого свой тег: общий тег при параллельной сборке даёт конфликт "already exists".
+x-backend: &backend
+  build:
+    context: .
+    dockerfile: Dockerfile
+  environment:
+    APP_CONFIG: ${APP_CONFIG:-prod}
+    SECRET_KEY: ${SECRET_KEY:-demo-only-secret-change-me}
+    LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-credit}:${POSTGRES_PASSWORD:-credit}@db:5432/${POSTGRES_DB:-credit}
+    TEST_DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-credit}:${POSTGRES_PASSWORD:-credit}@db:5432/${POSTGRES_DB:-credit}_test
+    MOCKS_BASE_URL: http://mocks:8001
+    KEY_RATE: ${KEY_RATE:-14.0}
+    PIPELINE_STEP_DELAY_MS: ${PIPELINE_STEP_DELAY_MS:-700}
+    LLM_ENABLED: ${LLM_ENABLED:-false}
+  restart: unless-stopped
+
+services:
+  db:
+    image: postgres:16.15-alpine3.24
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-credit}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-credit}
+      POSTGRES_DB: ${POSTGRES_DB:-credit}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  app:
+    <<: *backend
+    image: credit-conveyor-app:1.0.0
+    command: ["serve"]
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/ready', timeout=2).status == 200 else 1)"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+
+  worker:
+    <<: *backend
+    image: credit-conveyor-worker:1.0.0
+    command: ["flask", "pipeline-worker"]
+    depends_on:
+      db:
+        condition: service_healthy
+      # миграции применяет app при старте
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os, sys, time; sys.exit(0 if time.time() - os.path.getmtime('/tmp/worker-heartbeat') < 30 else 1)"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+      start_period: 15s
+
+  mocks:
+    build:
+      context: ./mocks
+    image: credit-conveyor-mocks:1.0.0
+    environment:
+      MOCKS_FAILURE_RATE: ${MOCKS_FAILURE_RATE:-0}
+    ports:
+      - "${MOCKS_PORT:-8001}:8001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=2).status == 200 else 1)"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    image: credit-conveyor-nginx:1.0.0
+    ports:
+      - "${NGINX_PORT:-8080}:80"
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  db-data:
