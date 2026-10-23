@@ -1,0 +1,35 @@
+# Необязательный оверрайд: лимиты ресурсов и обязательный SECRET_KEY.
+#   SECRET_KEY=<случайная строка> docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+# Весь стек без Ollama укладывается в 2 ГБ памяти.
+x-secret: &secret
+  SECRET_KEY: ${SECRET_KEY:?Задайте SECRET_KEY для запуска с docker-compose.prod.yml}
+
+services:
+  db:
+    deploy:
+      resources:
+        limits: {cpus: "1.0", memory: 512M}
+
+  app:
+    environment:
+      <<: *secret
+    deploy:
+      resources:
+        limits: {cpus: "1.0", memory: 512M}
+
+  worker:
+    environment:
+      <<: *secret
+    deploy:
+      resources:
+        limits: {cpus: "0.5", memory: 256M}
+
+  mocks:
+    deploy:
+      resources:
+        limits: {cpus: "0.5", memory: 128M}
+
+  nginx:
+    deploy:
+      resources:
+        limits: {cpus: "0.5", memory: 64M}
