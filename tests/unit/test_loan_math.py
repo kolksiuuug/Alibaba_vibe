@@ -27,7 +27,9 @@ def test_max_principal_for_non_positive_payment_is_zero() -> None:
     assert max_principal(Decimal("0"), 12, Decimal("20")) == 0
 
 
-@pytest.mark.parametrize(("principal", "term", "rate"), [(1_000_000, 12, "18.5"), (750_000, 7, "0")])
+@pytest.mark.parametrize(
+    ("principal", "term", "rate"), [(1_000_000, 12, "18.5"), (750_000, 7, "0")]
+)
 def test_schedule_repays_principal_exactly(principal: int, term: int, rate: str) -> None:
     rows = payment_schedule(principal, term, Decimal(rate))
 

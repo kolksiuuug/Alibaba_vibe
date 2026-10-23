@@ -47,7 +47,12 @@ def test_every_factor_has_points_within_max_and_explanation() -> None:
 
 @pytest.mark.parametrize(
     ("registered_at", "points"),
-    [(date(2025, 11, 1), 0), (date(2025, 10, 23), 10), (date(2021, 10, 24), 30), (date(2021, 10, 23), 40)],
+    [
+        (date(2025, 11, 1), 0),
+        (date(2025, 10, 23), 10),
+        (date(2021, 10, 24), 30),
+        (date(2021, 10, 23), 40),
+    ],
 )
 def test_business_age_bands(registered_at: date, points: int) -> None:
     egrul = EgrulData(status="active", registered_at=registered_at)
@@ -56,11 +61,21 @@ def test_business_age_bands(registered_at: date, points: int) -> None:
 
 @pytest.mark.parametrize(
     ("monthly", "points"),
-    [(299_999, 0), (300_000, 10), (999_999, 10), (1_000_000, 25), (3_000_000, 40), (10_000_000, 50)],
+    [
+        (299_999, 0),
+        (300_000, 10),
+        (999_999, 10),
+        (1_000_000, 25),
+        (3_000_000, 40),
+        (10_000_000, 50),
+    ],
 )
 def test_avg_turnover_bands(monthly: int, points: int) -> None:
     turnover = (monthly,) * 12
-    assert _points(_score(monthly_turnover=turnover, requested_amount=100_000), "avg_turnover") == points
+    assert (
+        _points(_score(monthly_turnover=turnover, requested_amount=100_000), "avg_turnover")
+        == points
+    )
 
 
 @pytest.mark.parametrize(
@@ -81,7 +96,15 @@ def test_turnover_stability_bands(turnover: tuple[int, ...], points: int) -> Non
 
 @pytest.mark.parametrize(
     ("payments", "points"),
-    [(0, 40), (150_000, 40), (150_001, 30), (450_000, 30), (900_000, 15), (1_350_000, 0), (1_500_000, -20)],
+    [
+        (0, 40),
+        (150_000, 40),
+        (150_001, 30),
+        (450_000, 30),
+        (900_000, 15),
+        (1_350_000, 0),
+        (1_500_000, -20),
+    ],
 )
 def test_debt_load_bands(payments: int, points: int) -> None:
     assert _points(_score(bki=BkiData(monthly_payments=payments)), "debt_load") == points
@@ -144,14 +167,27 @@ def test_security(form: dict[str, object], points: int) -> None:
     assert _points(_score(form_data=form), "security") == points
 
 
-@pytest.mark.parametrize(("okved", "points"), [("10.71", 20), ("49.41", 10), ("56.10", 0), ("41.20", 0)])
+@pytest.mark.parametrize(
+    ("okved", "points"), [("10.71", 20), ("49.41", 10), ("56.10", 0), ("41.20", 0)]
+)
 def test_industry_risk(okved: str, points: int) -> None:
     assert _points(_score(okved=okved), "industry_risk") == points
 
 
 @pytest.mark.parametrize(
     ("total", "grade"),
-    [(330, "A"), (250, "A"), (249, "B"), (200, "B"), (199, "C"), (140, "C"), (139, "D"), (100, "D"), (99, "E"), (-50, "E")],
+    [
+        (330, "A"),
+        (250, "A"),
+        (249, "B"),
+        (200, "B"),
+        (199, "C"),
+        (140, "C"),
+        (139, "D"),
+        (100, "D"),
+        (99, "E"),
+        (-50, "E"),
+    ],
 )
 def test_grade_thresholds(total: int, grade: str) -> None:
     assert grade_for(total, CONFIG) == grade

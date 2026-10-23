@@ -8,11 +8,23 @@ from typing import Any
 
 from app.domain.statuses import Status
 from app.scoring.decision_engine import decide
-from app.scoring.types import BkiData, EgrulData, EngineDecision, FnsData, ProductTerms, ScoringInput
+from app.scoring.types import (
+    BkiData,
+    EgrulData,
+    EngineDecision,
+    FnsData,
+    ProductTerms,
+    ScoringInput,
+)
 from tests.scoring_builders import KEY_RATE, TODAY
 
 ROOT = Path(__file__).resolve().parents[2]
-BKI_FIELDS = ("current_overdue_days", "max_overdue_days_24m", "overdue_count_24m", "monthly_payments")
+BKI_FIELDS = (
+    "current_overdue_days",
+    "max_overdue_days_24m",
+    "overdue_count_24m",
+    "monthly_payments",
+)
 COLLATERAL_FORM = {
     "collateral_description": "Токарный станок с ЧПУ, 2024 года выпуска",
     "collateral_value": 3_200_000,

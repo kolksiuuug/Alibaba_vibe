@@ -13,7 +13,9 @@ CONFIG = load_config()
 
 
 def _codes(**overrides: object) -> list[str]:
-    return [reason.code for reason in find_stop_factors(good_input(**overrides), CONFIG, today=TODAY)]
+    return [
+        reason.code for reason in find_stop_factors(good_input(**overrides), CONFIG, today=TODAY)
+    ]
 
 
 def test_clean_profile_has_no_stop_factors() -> None:
