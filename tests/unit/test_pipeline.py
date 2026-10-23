@@ -39,16 +39,25 @@ def _submitted(
     user = db.session.scalars(select(User).where(User.login == login)).one()
     product = db.session.scalars(select(Product).where(Product.code == product_code)).one()
     application = make_application(
-        status=Status.SUBMITTED, client=user, product=product, amount=amount, term_months=term, **extra
+        status=Status.SUBMITTED,
+        client=user,
+        product=product,
+        amount=amount,
+        term_months=term,
+        **extra,
     )
     job = enqueue_job(application)
     db.session.commit()
     return application, job
 
 
-def _transitions(db: SQLAlchemy, application: Application) -> list[tuple[str | None, str, str | None]]:
+def _transitions(
+    db: SQLAlchemy, application: Application
+) -> list[tuple[str | None, str, str | None]]:
     events = db.session.scalars(
-        select(AuditEvent).where(AuditEvent.application_id == application.id).order_by(AuditEvent.id)
+        select(AuditEvent)
+        .where(AuditEvent.application_id == application.id)
+        .order_by(AuditEvent.id)
     )
     return [(e.from_status, e.to_status, e.reason) for e in events]
 
@@ -61,14 +70,20 @@ def test_demo_approve_gets_offer_and_full_trail(app: Flask, db: SQLAlchemy) -> N
     assert application.status is Status.OFFER
     assert [step["state"] for step in application.pipeline_steps] == ["done"] * len(STEP_CODES)
     assert [step["code"] for step in application.pipeline_steps] == list(STEP_CODES)
-    checks = db.session.scalars(select(CheckResult).where(CheckResult.application_id == application.id))
+    checks = db.session.scalars(
+        select(CheckResult).where(CheckResult.application_id == application.id)
+    )
     assert {c.source: c.status for c in checks} == {"egrul": "ok", "fns": "ok", "bki": "ok"}
     scoring = db.session.scalars(select(ScoringResult)).one()
     assert (scoring.score, scoring.grade) == (290, "A")
     assert len(scoring.factors) == 9
     assert 3 <= len(scoring.client_factors) <= 5
     decision = db.session.scalars(select(Decision)).one()
-    assert (decision.outcome, decision.decided_by, decision.is_counter) == ("offer", "engine", False)
+    assert (decision.outcome, decision.decided_by, decision.is_counter) == (
+        "offer",
+        "engine",
+        False,
+    )
     assert (decision.amount, decision.term_months) == (3_000_000, 24)
     assert _transitions(db, application) == [
         ("submitted", "checking", None),
@@ -166,7 +181,11 @@ def test_resume_skips_completed_steps(app: Flask, db: SQLAlchemy) -> None:
     )
     transition(application, Status.CHECKING, actor=Actor.SYSTEM)
     application.pipeline_steps = [
-        {"code": code, "state": "done" if code in ("validation", "egrul") else "pending", "job_id": job.id}
+        {
+            "code": code,
+            "state": "done" if code in ("validation", "egrul") else "pending",
+            "job_id": job.id,
+        }
         for code in STEP_CODES
     ]
     db.session.commit()

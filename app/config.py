@@ -50,10 +50,16 @@ class BaseConfig:
     KEY_RATE = env_float("KEY_RATE", 14.0)
 
     PIPELINE_STEP_DELAY_MS = env_int("PIPELINE_STEP_DELAY_MS", 700)
+    PIPELINE_HEARTBEAT_TIMEOUT_S = env_int("PIPELINE_HEARTBEAT_TIMEOUT_S", 60)
+    PIPELINE_MAX_ATTEMPTS = env_int("PIPELINE_MAX_ATTEMPTS", 3)
+    PIPELINE_RETRY_BACKOFF_S = env_int("PIPELINE_RETRY_BACKOFF_S", 5)
     WORKER_POLL_INTERVAL_MS = env_int("WORKER_POLL_INTERVAL_MS", 1000)
     WORKER_HEARTBEAT_FILE = os.getenv("WORKER_HEARTBEAT_FILE", "/tmp/worker-heartbeat")
 
+    # Внешние системы — только моки (CLAUDE.md, раздел 1.3)
     MOCKS_BASE_URL = os.getenv("MOCKS_BASE_URL", "http://mocks:8001")
+    ADAPTER_TIMEOUT_S = env_float("ADAPTER_TIMEOUT_S", 3.0)
+    ADAPTER_RETRIES = env_int("ADAPTER_RETRIES", 2)
     LLM_ENABLED = env_bool("LLM_ENABLED", False)
 
 

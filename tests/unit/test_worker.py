@@ -140,7 +140,10 @@ def test_disbursement_issues_loan(db: SQLAlchemy) -> None:
     assert job.state == "done"
     assert job.application.status is Status.ISSUED
     disbursement = db.session.scalars(select(Disbursement)).one()
-    assert (disbursement.amount, disbursement.abs_reference) == (1_000_000, f"ABS-{job.application_id}")
+    assert (disbursement.amount, disbursement.abs_reference) == (
+        1_000_000,
+        f"ABS-{job.application_id}",
+    )
     titles = {n.title for n in db.session.scalars(select(Notification))}
     assert "Кредит выдан" in titles
 

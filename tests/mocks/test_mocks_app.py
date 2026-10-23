@@ -35,7 +35,9 @@ def test_unknown_inn_gets_deterministic_answer(mocks: FlaskClient, inn: str) -> 
     assert egrul["status"] in {"active", "liquidating"}
 
 
-@pytest.mark.parametrize("path", ["/bki/report?inn=12ab", "/egrul/123", "/fns/transparent-business/1"])
+@pytest.mark.parametrize(
+    "path", ["/bki/report?inn=12ab", "/egrul/123", "/fns/transparent-business/1"]
+)
 def test_invalid_inn_is_400(mocks: FlaskClient, path: str) -> None:
     assert mocks.get(path).status_code == 400
 
@@ -54,7 +56,12 @@ def test_admin_fail_rejects_unknown_service(mocks: FlaskClient) -> None:
 
 
 def test_disbursement_is_idempotent(mocks: FlaskClient) -> None:
-    body = {"idempotency_key": "application-7", "application_id": 7, "inn": "0044385397", "amount": 500000}
+    body = {
+        "idempotency_key": "application-7",
+        "application_id": 7,
+        "inn": "0044385397",
+        "amount": 500000,
+    }
     first = mocks.post("/abs/disbursements", json=body).json
     second = mocks.post("/abs/disbursements", json=body).json
 

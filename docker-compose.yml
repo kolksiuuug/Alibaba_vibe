@@ -17,6 +17,11 @@ x-backend: &backend
     MOCKS_BASE_URL: http://mocks:8001
     KEY_RATE: ${KEY_RATE:-14.0}
     PIPELINE_STEP_DELAY_MS: ${PIPELINE_STEP_DELAY_MS:-700}
+    PIPELINE_HEARTBEAT_TIMEOUT_S: ${PIPELINE_HEARTBEAT_TIMEOUT_S:-60}
+    PIPELINE_MAX_ATTEMPTS: ${PIPELINE_MAX_ATTEMPTS:-3}
+    PIPELINE_RETRY_BACKOFF_S: ${PIPELINE_RETRY_BACKOFF_S:-5}
+    ADAPTER_TIMEOUT_S: ${ADAPTER_TIMEOUT_S:-3}
+    ADAPTER_RETRIES: ${ADAPTER_RETRIES:-2}
     LLM_ENABLED: ${LLM_ENABLED:-false}
   restart: unless-stopped
 
@@ -59,6 +64,9 @@ services:
         condition: service_healthy
       # миграции применяет app при старте
       app:
+        condition: service_healthy
+      # без моков конвейер тоже работает (fallback в manual_review), но для демо ждём их
+      mocks:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import os, sys, time; sys.exit(0 if time.time() - os.path.getmtime('/tmp/worker-heartbeat') < 30 else 1)"]

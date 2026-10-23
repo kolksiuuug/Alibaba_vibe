@@ -74,7 +74,12 @@ def test_adapters_call_mock_endpoints() -> None:
     seen: list[tuple[str, str]] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
-        seen.append((request.method, request.url.path + ("?" + request.url.query.decode() if request.url.query else "")))
+        seen.append(
+            (
+                request.method,
+                request.url.path + ("?" + request.url.query.decode() if request.url.query else ""),
+            )
+        )
         return httpx.Response(200, json={})
 
     config = {"MOCKS_BASE_URL": "http://mocks:8001", "ADAPTER_TIMEOUT_S": 3.0, "ADAPTER_RETRIES": 2}
