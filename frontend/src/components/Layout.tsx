@@ -20,6 +20,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 
 import { Api } from "../api/endpoints";
 import { homePath, useAuth } from "../auth/AuthContext";
+import { isMainProfile } from "../shared/dictionaries";
 import { NotificationBell } from "./NotificationBell";
 
 export function Layout() {
@@ -94,7 +95,7 @@ export function Layout() {
                   </Menu.Target>
                   <Menu.Dropdown>
                     <Menu.Label>Сменить демо-профиль</Menu.Label>
-                    {profiles.data?.map((profile) => (
+                    {profiles.data?.filter(isMainProfile).map((profile) => (
                       <Menu.Item
                         key={profile.login}
                         onClick={() => void switchTo(profile.login)}

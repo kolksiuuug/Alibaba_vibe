@@ -10,16 +10,27 @@ from flask.cli import with_appcontext
 @click.command("seed")
 @click.option("--reset", is_flag=True, help="Очистить все таблицы и загрузить демо-данные заново.")
 @click.option("--if-empty", is_flag=True, help="Загрузить демо-данные, только если БД пустая.")
+@click.option(
+    "--generate", "generate", type=int, default=0, help="Добавить N сгенерированных компаний."
+)
+@click.option("--gen-seed", type=int, default=42, help="Seed генератора (данные воспроизводимы).")
 @with_appcontext
-def seed_command(reset: bool, if_empty: bool) -> None:
-    """Загрузить синтетические демо-данные из каталога seed/."""
-    from app.services.seed import load_seed, seed_is_loaded
+def seed_command(reset: bool, if_empty: bool, generate: int, gen_seed: int) -> None:
+    """Загрузить синтетические демо-данные из каталога seed/ (и сгенерированные компании)."""
+    from app.services.seed import load_extra_companies, load_seed, seed_is_loaded
 
-    if if_empty and not reset and seed_is_loaded():
-        click.echo("seed: data already present, skipping")
-        return
-    summary = load_seed(current_app.config["SEED_DIR"], reset=reset)
-    click.echo(f"seed: loaded {summary}")
+    if reset or not seed_is_loaded():
+        summary = load_seed(current_app.config["SEED_DIR"], reset=reset)
+        click.echo(f"seed: loaded {summary}")
+    elif not generate:
+        hint = "" if if_empty else " (use --reset to reload)"
+        click.echo(f"seed: data already present, skipping{hint}")
+
+    if generate > 0:
+        from seed.generate import generate_companies
+
+        added = load_extra_companies(generate_companies(generate, gen_seed))
+        click.echo(f"seed: added {added} generated companies (seed {gen_seed})")
 
 
 @click.command("pipeline-worker")

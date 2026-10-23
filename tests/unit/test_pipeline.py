@@ -206,3 +206,38 @@ def test_repeated_job_after_decision_changes_nothing(app: Flask, db: SQLAlchemy)
     assert application.status is Status.OFFER
     assert len(_transitions(db, application)) == events_before
     assert db.session.scalar(select(func.count()).select_from(Decision)) == 1
+
+
+def test_generated_companies_get_varied_decisions_from_mocks(app: Flask, db: SQLAlchemy) -> None:
+    """Логика не заточена под демо: синтетические компании с ответами моков по хешу ИНН."""
+    from app.services.seed import load_extra_companies
+    from mocks.app import app as mocks_app
+    from seed.generate import generate_companies
+
+    load_seed(app.config["SEED_DIR"])
+    load_extra_companies(generate_companies(30, 42))
+    mocks = mocks_app.test_client()
+    paths = {
+        "bki": "/bki/report?inn={inn}",
+        "egrul": "/egrul/{inn}",
+        "fns": "/fns/transparent-business/{inn}",
+    }
+
+    class MocksBacked(FakeExternal):
+        def _call(self, source: str, inn: str) -> dict[str, Any]:
+            return dict(mocks.get(paths[source].format(inn=inn)).json)
+
+    ctx = fake_context(MocksBacked())
+    product = db.session.scalars(select(Product).where(Product.code == "turnover")).one()
+    outcomes = set()
+    for user in db.session.scalars(select(User).where(User.login.like("gen-%"))).all():
+        application = make_application(
+            status=Status.SUBMITTED, client=user, product=product, amount=1_000_000, term_months=12
+        )
+        job = enqueue_job(application)
+        db.session.commit()
+        run_scoring(job, ctx)
+        outcomes.add(application.status)
+
+    assert outcomes <= {Status.OFFER, Status.MANUAL_REVIEW, Status.REJECTED}
+    assert len(outcomes) >= 2

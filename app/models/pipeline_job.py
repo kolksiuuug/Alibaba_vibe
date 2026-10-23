@@ -20,7 +20,7 @@ class PipelineJob(db.Model):  # type: ignore[name-defined]
         CheckConstraint("kind IN ('scoring', 'disbursement')", name="kind"),
         Index("ix_pipeline_jobs_ready", "state", "run_after"),
         # Не больше одной задачи каждого вида в очереди на заявку: повторный submit не дублирует.
-        # Выполняемая задача сюда не входит: пока воркер её закрывает, новая уже может встать в очередь.
+        # Выполняемая задача не учитывается: пока воркер её закрывает, новая может встать в очередь.
         Index(
             "uq_pipeline_jobs_queued",
             "application_id",

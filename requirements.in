@@ -16,3 +16,6 @@ PyYAML==6.0.2
 # Тесты запускаются в образе app (make test)
 pytest==8.3.3
 pytest-flask==1.3.0
+
+# Генератор синтетических компаний seed/generate.py (flask seed --generate)
+Faker==40.43.0

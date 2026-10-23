@@ -5,7 +5,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from sqlalchemy import text
+from sqlalchemy import select, text
 
 from app.domain.roles import Role
 from app.extensions import db
@@ -33,16 +33,10 @@ def clear_all() -> None:
     db.session.expunge_all()
 
 
-def load_seed(seed_dir: str, *, reset: bool = False) -> dict[str, int]:
-    if reset:
-        clear_all()
-
-    products = [Product(**item) for item in _read_json(seed_dir, "products.json")]
-    db.session.add_all(products)
-
-    users = [User(role=Role.ANALYST, **DEMO_ANALYST)]
-    companies = []
-    for item in _read_json(seed_dir, "demo_companies.json"):
+def _clients(items: list[dict[str, Any]]) -> tuple[list[Company], list[User]]:
+    """Компании и их пользователи-клиенты из записей формата seed/demo_companies.json."""
+    companies, users = [], []
+    for item in items:
         company_data = dict(item["company"])
         company_data["registered_at"] = date.fromisoformat(company_data["registered_at"])
         company = Company(**company_data)
@@ -56,6 +50,33 @@ def load_seed(seed_dir: str, *, reset: bool = False) -> dict[str, int]:
                 demo_hint=item.get("demo_hint"),
             )
         )
+    return companies, users
+
+
+def load_seed(seed_dir: str, *, reset: bool = False) -> dict[str, int]:
+    if reset:
+        clear_all()
+
+    products = [Product(**item) for item in _read_json(seed_dir, "products.json")]
+    db.session.add_all(products)
+
+    companies, clients = _clients(_read_json(seed_dir, "demo_companies.json"))
+    users = [User(role=Role.ANALYST, **DEMO_ANALYST), *clients]
     db.session.add_all(companies + users)
     db.session.commit()
     return {"products": len(products), "companies": len(companies), "users": len(users)}
+
+
+def load_extra_companies(items: list[dict[str, Any]]) -> int:
+    """Добавить сгенерированные компании (seed/generate.py); уже загруженные ИНН пропускаются."""
+    known_inns = set(db.session.scalars(select(Company.inn)))
+    known_logins = set(db.session.scalars(select(User.login)))
+    fresh = [
+        item
+        for item in items
+        if item["company"]["inn"] not in known_inns and item["login"] not in known_logins
+    ]
+    companies, users = _clients(fresh)
+    db.session.add_all(companies + users)
+    db.session.commit()
+    return len(companies)

@@ -33,3 +33,4 @@ everything-claude-code/
 .DS_Store
 .idea/
 .vscode/
+seed/generated_companies.json

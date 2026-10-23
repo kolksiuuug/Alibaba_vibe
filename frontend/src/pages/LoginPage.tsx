@@ -1,4 +1,15 @@
-import { Alert, Badge, Button, Card, SimpleGrid, Stack, Text, Title } from "@mantine/core";
+import {
+  Alert,
+  Badge,
+  Button,
+  Card,
+  Group,
+  Select,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -7,16 +18,20 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { Api } from "../api/endpoints";
 import { homePath, useAuth } from "../auth/AuthContext";
 import { ErrorAlert, PageLoader } from "../components/common";
-import { ROLE_LABELS } from "../shared/dictionaries";
+import { isMainProfile, ROLE_LABELS } from "../shared/dictionaries";
 
 export function LoginPage() {
   const { user, loginAs } = useAuth();
   const navigate = useNavigate();
   const [pending, setPending] = useState<string | null>(null);
   const [error, setError] = useState<unknown>(null);
+  const [generated, setGenerated] = useState<string | null>(null);
   const profiles = useQuery({ queryKey: ["demo-profiles"], queryFn: Api.demoProfiles });
 
   if (user) return <Navigate to={homePath(user)} replace />;
+
+  const main = profiles.data?.filter(isMainProfile) ?? [];
+  const others = profiles.data?.filter((profile) => !isMainProfile(profile)) ?? [];
 
   async function enter(login: string) {
     setPending(login);
@@ -50,7 +65,7 @@ export function LoginPage() {
         <PageLoader />
       ) : (
         <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
-          {profiles.data?.map((profile) => (
+          {main.map((profile) => (
             <Card key={profile.login} withBorder padding="lg">
               <Stack gap="xs" h="100%" justify="space-between">
                 <div>
@@ -81,6 +96,35 @@ export function LoginPage() {
             </Card>
           ))}
         </SimpleGrid>
+      )}
+      {others.length > 0 && (
+        <Card withBorder padding="lg">
+          <Text fw={600}>Сгенерированные компании ({others.length})</Text>
+          <Text size="sm" c="dimmed" mb="sm">
+            Созданы командой <code>flask seed --generate</code>. Моки отвечают по хешу ИНН, поэтому
+            исход у каждой свой.
+          </Text>
+          <Group align="flex-end">
+            <Select
+              placeholder="Найдите компанию"
+              searchable
+              data={others.map((profile) => ({
+                value: profile.login,
+                label: profile.company_name ?? profile.display_name,
+              }))}
+              value={generated}
+              onChange={setGenerated}
+              style={{ flex: 1 }}
+            />
+            <Button
+              disabled={!generated}
+              loading={pending === generated}
+              onClick={() => generated && void enter(generated)}
+            >
+              Войти
+            </Button>
+          </Group>
+        </Card>
       )}
     </Stack>
   );

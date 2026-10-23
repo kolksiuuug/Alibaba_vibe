@@ -36,3 +36,27 @@ def test_seed_cli_if_empty_runs_once(app: Flask, db: SQLAlchemy) -> None:
     second = runner.invoke(args=["seed", "--if-empty"])
     assert "loaded" in first.output
     assert "skipping" in second.output
+
+
+def test_generator_is_deterministic_and_synthetic() -> None:
+    from seed.generate import generate_companies
+
+    first, second = generate_companies(10, 42), generate_companies(10, 42)
+
+    assert first == second
+    assert len({item["company"]["inn"] for item in first}) == 10
+    assert all(item["company"]["inn"].startswith("00") for item in first)
+    assert all(len(item["company"]["monthly_turnover"]) == 12 for item in first)
+    assert generate_companies(5, 7) != generate_companies(5, 42)
+
+
+def test_seed_cli_generate_adds_companies_once(app: Flask, db: SQLAlchemy) -> None:
+    runner = app.test_cli_runner()
+    runner.invoke(args=["seed"])
+
+    added = runner.invoke(args=["seed", "--generate", "5", "--gen-seed", "1"])
+    repeated = runner.invoke(args=["seed", "--generate", "5", "--gen-seed", "1"])
+
+    assert "added 5" in added.output
+    assert "added 0" in repeated.output
+    assert db.session.scalar(select(func.count(Company.id))) == 10

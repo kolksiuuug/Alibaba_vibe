@@ -29,7 +29,7 @@ def require_role(*roles: str) -> Callable[[F], F]:
             user = user_from_token(token.strip())
             if user is None:
                 abort(401, message="Сессия истекла, войдите снова")
-            if roles and user.role not in roles:
+            elif roles and user.role not in roles:
                 abort(403, message="Раздел недоступен для этой роли")
             g.current_user = user
             return view(*args, **kwargs)

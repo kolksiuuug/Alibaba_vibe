@@ -1,6 +1,7 @@
 """Конфигурация из переменных окружения: DevConfig, TestConfig, ProdConfig."""
 
 import os
+from typing import Any
 
 from dotenv import load_dotenv
 
@@ -44,7 +45,7 @@ class BaseConfig:
     OPENAPI_SWAGGER_UI_PATH = "/docs"
     OPENAPI_SWAGGER_UI_URL = os.getenv("SWAGGER_UI_URL", "/swagger-ui/")
     # Все операции требуют Bearer-токен, кроме помеченных security=[] (демо-вход, health)
-    API_SPEC_OPTIONS = {"security": [{"bearerAuth": []}]}
+    API_SPEC_OPTIONS: dict[str, Any] = {"security": [{"bearerAuth": []}]}
 
     # Время жизни токена демо-входа, с
     TOKEN_MAX_AGE_S = env_int("TOKEN_MAX_AGE_S", 86400)
@@ -89,7 +90,7 @@ CONFIGS: dict[str, type[BaseConfig]] = {"dev": DevConfig, "test": TestConfig, "p
 
 
 def get_config(name: str | None = None) -> type[BaseConfig]:
-    key = (name or os.getenv("APP_CONFIG", "dev")).strip().lower()
+    key = (name or os.environ.get("APP_CONFIG") or "dev").strip().lower()
     try:
         return CONFIGS[key]
     except KeyError:

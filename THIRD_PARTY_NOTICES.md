@@ -20,6 +20,7 @@
 | httpx | 0.27.0 | BSD-3-Clause | HTTP-клиент адаптеров |
 | python-dotenv | 1.0.1 | BSD-3-Clause | загрузка `.env` |
 | PyYAML | 6.0.2 | MIT | конфиг скоринга, экспорт OpenAPI в YAML |
+| Faker | 40.43.0 | MIT | генератор синтетических компаний `seed/generate.py` (ФИО, слова) |
 | pytest | 8.3.3 | MIT | тесты |
 | pytest-flask | 1.3.0 | MIT | фикстуры Flask для тестов |
 
@@ -55,6 +56,10 @@ Flask 3.1.2 (BSD-3-Clause) и gunicorn 23.0.0 (MIT) с теми же транз�
 | typescript | 5.9.3 | Apache-2.0 | проверка типов |
 | openapi-typescript | 7.13.0 | MIT | генерация типов API из `docs/openapi.yaml` |
 | prettier | 3.9.10 | MIT | форматирование |
+| eslint, @eslint/js | 9.39.5 | MIT | линтер (`npm run lint`) |
+| typescript-eslint | 8.72.0 | MIT | правила ESLint для TypeScript |
+| eslint-plugin-react-hooks | 5.2.0 | MIT | правила для React hooks |
+| globals | 16.5.0 | MIT | глобальные переменные браузера для ESLint |
 | @types/react, @types/react-dom | 18.3.x | MIT | типы |
 
 Транзитивные пакеты в браузере (зависимости Mantine): MIT (@floating-ui, react-remove-scroll и др.), 0BSD (tslib).

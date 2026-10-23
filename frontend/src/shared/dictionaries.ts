@@ -119,3 +119,8 @@ export const GRADE_COLORS: Record<string, string> = {
   D: "orange",
   E: "red",
 };
+
+/** Демо-профили из seed/demo_companies.json и аналитик; остальные — из генератора. */
+export function isMainProfile(profile: { login: string; role: string }): boolean {
+  return profile.role === "analyst" || profile.login.startsWith("demo-");
+}
