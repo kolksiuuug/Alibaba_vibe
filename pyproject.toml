@@ -1,0 +1,14 @@
+# Только настройки инструментов (ruff, mypy). Зависимости — в requirements*.in.
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["everything-claude-code", "frontend", "migrations/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+exclude = ["everything-claude-code/", "frontend/", "migrations/"]

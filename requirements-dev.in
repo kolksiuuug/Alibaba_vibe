@@ -1,0 +1,7 @@
+# Инструменты разработки: линтеры, типы, аудит зависимостей. В образ не попадают.
+# Lock с хешами: make lock -> requirements-dev.txt.
+-c requirements.txt
+ruff
+mypy
+pip-audit
+types-PyYAML
