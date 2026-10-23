@@ -1,9 +1,17 @@
-"""Уведомления в продукте: тексты по статусам заявки. Email и SMS не используются."""
+"""Уведомления в продукте: тексты по статусам заявки и центр уведомлений.
 
+Email, SMS и мессенджеры не используются: уведомления видны только в интерфейсе.
+"""
+
+from sqlalchemy import func, select
+
+from app.domain.errors import AccessDenied, NotFound
 from app.domain.statuses import Status
-from app.models import Application, Notification
+from app.extensions import db
+from app.models import Application, Notification, User
 
 S = Status
+NOTIFICATIONS_LIMIT = 100
 
 # Заголовок и текст уведомления клиенту при переходе в статус; {id} — номер заявки
 STATUS_MESSAGES: dict[Status, tuple[str, str]] = {
@@ -66,3 +74,31 @@ def status_notification(
         title=title,
         body=body or template.format(id=application.id),
     )
+
+
+def list_for_user(user: User) -> tuple[list[Notification], int]:
+    items = list(
+        db.session.scalars(
+            select(Notification)
+            .where(Notification.user_id == user.id)
+            .order_by(Notification.id.desc())
+            .limit(NOTIFICATIONS_LIMIT)
+        )
+    )
+    unread = db.session.scalar(
+        select(func.count())
+        .select_from(Notification)
+        .where(Notification.user_id == user.id, Notification.is_read.is_(False))
+    )
+    return items, int(unread or 0)
+
+
+def mark_read(user: User, notification_id: int) -> Notification:
+    notification = db.session.get(Notification, notification_id)
+    if notification is None:
+        raise NotFound("Уведомление не найдено")
+    if notification.user_id != user.id:
+        raise AccessDenied("Это уведомление другого пользователя")
+    notification.is_read = True
+    db.session.commit()
+    return notification

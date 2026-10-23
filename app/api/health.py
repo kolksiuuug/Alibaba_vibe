@@ -13,6 +13,7 @@ blp = Blueprint("health", __name__, url_prefix="/api", description="Состоя
 
 @blp.route("/health")
 class Health(MethodView):
+    @blp.doc(security=[])
     @blp.response(200, HealthSchema)
     def get(self) -> dict[str, str]:
         """Процесс жив (зависимости не проверяются)."""
@@ -21,6 +22,7 @@ class Health(MethodView):
 
 @blp.route("/ready")
 class Ready(MethodView):
+    @blp.doc(security=[])
     @blp.response(200, HealthSchema)
     def get(self) -> dict[str, str]:
         """Сервис готов принимать запросы: база данных доступна."""

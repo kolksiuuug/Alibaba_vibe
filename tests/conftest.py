@@ -10,6 +10,8 @@ from sqlalchemy.engine import make_url
 
 from app import create_app
 from app.extensions import db as _db
+from app.services.seed import load_seed
+from tests.fakes import FakeExternal, fake_context
 
 
 def _ensure_database(url: str) -> None:
@@ -40,6 +42,16 @@ def app() -> Iterator[Flask]:
 
 
 @pytest.fixture
+def external(app: Flask, db: SQLAlchemy) -> Iterator[FakeExternal]:
+    """Демо-данные + подмена внешних систем для API (подпись) и воркера (проверки, выдача)."""
+    load_seed(app.config["SEED_DIR"])
+    fake = FakeExternal()
+    app.extensions["adapters"] = fake_context(fake).adapters
+    yield fake
+    app.extensions.pop("adapters", None)
+
+
+@pytest.fixture
 def db(app: Flask) -> Iterator[SQLAlchemy]:
     """БД для теста; после теста все таблицы очищаются."""
     yield _db
@@ -47,3 +59,4 @@ def db(app: Flask) -> Iterator[SQLAlchemy]:
     tables = ", ".join(f'"{table.name}"' for table in _db.metadata.sorted_tables)
     _db.session.execute(text(f"TRUNCATE {tables} RESTART IDENTITY CASCADE"))
     _db.session.commit()
+    _db.session.expunge_all()

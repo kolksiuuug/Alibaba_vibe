@@ -1,11 +1,13 @@
 """Ошибки API в формате application/problem+json (RFC 7807)."""
 
+import http
 import logging
 from http import HTTPStatus
 from typing import Any
 
 from flask import Response, g, has_request_context, jsonify, request
 from flask_smorest import Api
+from flask_smorest.utils import prepare_response
 from marshmallow import Schema, fields
 from werkzeug.exceptions import HTTPException
 
@@ -68,6 +70,21 @@ class ProblemApi(Api):
     """Api smorest, который отдаёт все HTTP-ошибки как problem+json."""
 
     ERROR_SCHEMA = ProblemSchema
+
+    def _register_responses(self) -> None:
+        # Копия метода flask-smorest 0.47.0 (версия закреплена), но ошибки 4xx/5xx
+        # описаны в OpenAPI с типом application/problem+json, как их и отдаёт API.
+        for status in http.HTTPStatus:
+            response: dict[str, Any] = {"description": status.phrase}
+            content_type = self.DEFAULT_RESPONSE_CONTENT_TYPE
+            if status >= 400:
+                response["schema"] = self.ERROR_SCHEMA
+                content_type = PROBLEM_MIMETYPE
+            prepare_response(response, self.spec, content_type)
+            self.spec.components.response(status.name, response, lazy=True)
+        default = {"description": "Ошибка в формате problem+json", "schema": self.ERROR_SCHEMA}
+        prepare_response(default, self.spec, PROBLEM_MIMETYPE)
+        self.spec.components.response("DEFAULT_ERROR", default, lazy=True)
 
     def handle_http_exception(self, error: HTTPException) -> Response:
         data = getattr(error, "data", None) or {}

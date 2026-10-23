@@ -29,6 +29,8 @@ def seed_is_loaded() -> bool:
 def clear_all() -> None:
     tables = ", ".join(f'"{table.name}"' for table in db.metadata.sorted_tables)
     db.session.execute(text(f"TRUNCATE {tables} RESTART IDENTITY CASCADE"))
+    # id начинаются заново: старые объекты в сессии иначе конфликтуют с новыми
+    db.session.expunge_all()
 
 
 def load_seed(seed_dir: str, *, reset: bool = False) -> dict[str, int]:

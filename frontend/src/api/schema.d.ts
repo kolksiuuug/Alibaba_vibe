@@ -78,57 +78,1336 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/auth/demo-profiles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Демо-профили для экрана входа: пять компаний и аналитик. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["DemoProfile"][];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/demo-login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Войти в демо-профиль и получить Bearer-токен. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["DemoLogin"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Token"];
+                    };
+                };
+                422: components["responses"]["UNPROCESSABLE_ENTITY"];
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Текущий пользователь и его компания. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["User"];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Кредитные продукты со ставкой «от». */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Product"][];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/products/recommend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 1–3 подходящих продукта с предварительной ставкой и ежемесячным платежом. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RecommendRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Recommendation"][];
+                    };
+                };
+                422: components["responses"]["UNPROCESSABLE_ENTITY"];
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/calculator": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Аннуитетный платёж и график. Ставка — annual_rate или ставка «от» продукта. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CalculatorRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CalculatorResponse"];
+                    };
+                };
+                422: components["responses"]["UNPROCESSABLE_ENTITY"];
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Заявки компании текущего клиента. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApplicationSummary"][];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        put?: never;
+        /** Создать черновик. Данные компании подставляются автоматически. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ApplicationCreate"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApplicationDetail"];
+                    };
+                };
+                422: components["responses"]["UNPROCESSABLE_ENTITY"];
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: number;
+            };
+            cookie?: never;
+        };
+        /** Карточка заявки: статус, этапы проверки, предложение, дозапрос, факторы решения. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApplicationDetail"];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Изменить черновик (условия и поля анкеты). */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ApplicationPatch"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApplicationDetail"];
+                    };
+                };
+                422: components["responses"]["UNPROCESSABLE_ENTITY"];
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Отправить заявку на проверку. Повтор идемпотентен. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApplicationDetail"];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Отменить черновик или заявку, по которой банк ждёт ответа. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApplicationDetail"];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/info-response": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ответить на дозапрос банка: заявка снова уходит на проверку. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["InfoResponse"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApplicationDetail"];
+                    };
+                };
+                422: components["responses"]["UNPROCESSABLE_ENTITY"];
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/offer/accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Принять предложение банка. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApplicationDetail"];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/offer/decline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Отклонить предложение банка. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApplicationDetail"];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/sign/request-code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Получить код подписи. Симуляция: код показывается в интерфейсе, SMS не отправляется. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SignCode"];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/sign/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Подписать договор кодом (симуляция ЭП). Дальше воркер выдаёт кредит. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SignConfirm"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApplicationDetail"];
+                    };
+                };
+                422: components["responses"]["UNPROCESSABLE_ENTITY"];
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: number;
+            };
+            cookie?: never;
+        };
+        /** Таймлайн переходов статуса. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Event"][];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Последние уведомления пользователя и число непрочитанных. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["NotificationList"];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/{notification_id}/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                notification_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Отметить уведомление прочитанным. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    notification_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Notification"];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analyst/applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Очередь заявок с фильтром по статусу (черновики не показываются). */
+        get: {
+            parameters: {
+                query?: {
+                    /** @description draft | submitted | checking | info_requested | manual_review | offer | accepted | signed | issued | rejected | declined | cancelled */
+                    status?: string | null;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["QueueItem"][];
+                    };
+                };
+                422: components["responses"]["UNPROCESSABLE_ENTITY"];
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analyst/applications/{application_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: number;
+            };
+            cookie?: never;
+        };
+        /** Карточка: данные, проверки, скоринг по факторам, рекомендация движка, журнал. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["AnalystCard"];
+                    };
+                };
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analyst/applications/{application_id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Решение по ручному рассмотрению: одобрить, изменить условия, дозапрос, отказ. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    application_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["AnalystDecision"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["AnalystCard"];
+                    };
+                };
+                422: components["responses"]["UNPROCESSABLE_ENTITY"];
+                default: components["responses"]["DEFAULT_ERROR"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        Health: {
-            /** @example ok */
-            status: string;
+        Problem: {
+            /** @description URI типа ошибки, по умолчанию about:blank */
+            type?: string;
+            /** @description Краткое описание на русском */
+            title?: string;
+            /** @description HTTP-статус */
+            status?: number;
+            /** @description Подробности для пользователя */
+            detail?: string;
+            /** @description Путь запроса */
+            instance?: string;
+            /** @description Машинный код ошибки */
+            code?: string;
+            /** @description Ошибки валидации по полям */
+            errors?: Record<string, never>;
+            /** @description Идентификатор запроса для поиска в логах */
+            request_id?: string;
         };
         PaginationMetadata: {
-            /** @description First available page number. */
-            first_page?: number;
-            /** @description Last available page number. */
-            last_page?: number;
-            /** @description Next page number. */
-            next_page?: number;
-            /** @description Current page number. */
-            page?: number;
-            /** @description Previous page number. */
-            previous_page?: number;
             /** @description Total number of items. */
             total?: number;
             /** @description Total number of pages. */
             total_pages?: number;
+            /** @description First available page number. */
+            first_page?: number;
+            /** @description Last available page number. */
+            last_page?: number;
+            /** @description Current page number. */
+            page?: number;
+            /** @description Previous page number. */
+            previous_page?: number;
+            /** @description Next page number. */
+            next_page?: number;
         };
-        Problem: {
-            /** @description Машинный код ошибки */
-            code?: string;
-            /** @description Подробности для пользователя */
-            detail?: string;
-            /** @description Ошибки валидации по полям */
-            errors?: Record<string, never>;
-            /** @description Путь запроса */
-            instance?: string;
-            /** @description Идентификатор запроса для поиска в логах */
-            request_id?: string;
-            /** @description HTTP-статус */
-            status?: number;
-            /** @description Краткое описание на русском */
+        Health: {
+            /** @example ok */
+            status: string;
+        };
+        DemoProfile: {
+            login: string;
+            role: string;
+            display_name: string;
+            demo_hint?: string | null;
+            company_name?: string | null;
+        };
+        DemoLogin: {
+            login: string;
+        };
+        TurnoverMonth: {
+            /** @example 2026-09 */
+            month: string;
+            amount: number;
+        };
+        Company: {
+            id: number;
+            name: string;
+            /** @description ip | llc */
+            kind: string;
+            inn: string;
+            ogrn: string;
+            okved: string;
+            okved_name: string;
+            /** Format: date */
+            registered_at: string;
+            region: string;
+            director_name: string;
+            monthly_turnover: components["schemas"]["TurnoverMonth"][];
+        };
+        User: {
+            id: number;
+            login: string;
+            /** @description client | analyst */
+            role: string;
+            display_name: string;
+            demo_hint?: string | null;
+            company?: components["schemas"]["Company"] | null;
+        };
+        Token: {
+            token: string;
+            user: components["schemas"]["User"];
+        };
+        LabelledField: {
+            code: string;
+            label: string;
+        };
+        Product: {
+            code: string;
+            name: string;
+            description: string;
+            purposes: string[];
+            min_amount: number;
+            max_amount: number;
+            min_term_months: number;
+            max_term_months: number;
+            rate_spread: number;
+            /** @description Ставка «от»: ключевая ставка + спред продукта */
+            base_rate: number;
+            requires_collateral: boolean;
+            requires_guarantee: boolean;
+            required_fields: components["schemas"]["LabelledField"][];
+        };
+        RecommendRequest: {
+            /** @enum {string} */
+            purpose: "working_capital" | "equipment" | "cash_gap" | "expansion";
+            amount: number;
+            term_months: number;
+        };
+        Recommendation: {
+            product: components["schemas"]["Product"];
+            amount: number;
+            term_months: number;
+            rate: number;
+            monthly_payment: number;
+            /** @description Сумма и срок подходят продукту */
+            fits: boolean;
+            notes: string[];
+        };
+        CalculatorRequest: {
+            amount: number;
+            term_months: number;
+            product_code?: string;
+            annual_rate?: number;
+        };
+        ScheduleRow: {
+            number: number;
+            payment: number;
+            principal: number;
+            interest: number;
+            balance: number;
+        };
+        CalculatorResponse: {
+            amount: number;
+            term_months: number;
+            annual_rate: number;
+            monthly_payment: number;
+            total_payment: number;
+            overpayment: number;
+            schedule: components["schemas"]["ScheduleRow"][];
+        };
+        ProductBrief: {
+            code: string;
+            name: string;
+            requires_collateral: boolean;
+            requires_guarantee: boolean;
+        };
+        ApplicationSummary: {
+            id: number;
+            /** @description draft | submitted | checking | info_requested | manual_review | offer | accepted | signed | issued | rejected | declined | cancelled */
+            status: string;
+            product: components["schemas"]["ProductBrief"];
+            amount: number;
+            term_months: number;
+            purpose: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            status_changed_at: string;
+        };
+        ApplicationCreate: {
+            product_code: string;
+            amount: number;
+            term_months: number;
+            /** @enum {string} */
+            purpose: "working_capital" | "equipment" | "cash_gap" | "expansion";
+            form_data?: Record<string, never>;
+        };
+        Step: {
+            code: string;
             title?: string;
-            /** @description URI типа ошибки, по умолчанию about:blank */
-            type?: string;
+            /** @description pending | running | done | failed */
+            state: string;
+            started_at?: string;
+            finished_at?: string;
+            message?: string;
+        };
+        Application: {
+            id: number;
+            /** @description draft | submitted | checking | info_requested | manual_review | offer | accepted | signed | issued | rejected | declined | cancelled */
+            status: string;
+            product: components["schemas"]["ProductBrief"];
+            amount: number;
+            term_months: number;
+            purpose: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            status_changed_at: string;
+            company: components["schemas"]["Company"];
+            form_data: Record<string, never>;
+            pipeline_steps: components["schemas"]["Step"][];
+            /** Format: date-time */
+            submitted_at?: string | null;
+            /** Format: date-time */
+            updated_at: string;
+        };
+        Completeness: {
+            ready_to_submit: boolean;
+            missing_required: components["schemas"]["LabelledField"][];
+            missing_for_product: components["schemas"]["LabelledField"][];
+        };
+        Reason: {
+            code: string;
+            text: string;
+        };
+        Offer: {
+            amount: number;
+            term_months: number;
+            rate: number;
+            monthly_payment: number;
+            is_counter: boolean;
+            /** @description engine | analyst */
+            decided_by: string;
+            requested_amount: number;
+            requested_term_months: number;
+            total_payment: number;
+            overpayment: number;
+            reasons: components["schemas"]["Reason"][];
+            comment?: string | null;
+            schedule: components["schemas"]["ScheduleRow"][];
+        };
+        InfoRequest: {
+            id: number;
+            /** @description engine | analyst */
+            requested_by: string;
+            message: string;
+            fields: components["schemas"]["LabelledField"][];
+            response?: Record<string, never> | null;
+            /** Format: date-time */
+            responded_at?: string | null;
+            /** Format: date-time */
+            created_at: string;
+        };
+        Factor: {
+            code: string;
+            value: number;
+            points: number;
+            max_points: number;
+            explanation_ru: string;
+            /** @description positive | neutral | negative */
+            impact: string;
+        };
+        SignatureInfo: {
+            /** Format: date-time */
+            signed_at?: string | null;
+            signature_reference?: string | null;
+        };
+        DisbursementInfo: {
+            amount: number;
+            abs_reference: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        ApplicationDetail: {
+            application: components["schemas"]["Application"];
+            completeness: components["schemas"]["Completeness"];
+            offer?: components["schemas"]["Offer"] | null;
+            info_request?: components["schemas"]["InfoRequest"] | null;
+            factors: components["schemas"]["Factor"][];
+            reasons: components["schemas"]["Reason"][];
+            decision_comment?: string | null;
+            signature?: components["schemas"]["SignatureInfo"] | null;
+            disbursement?: components["schemas"]["DisbursementInfo"] | null;
+        };
+        ApplicationPatch: {
+            product_code?: string;
+            amount?: number;
+            term_months?: number;
+            /** @enum {string} */
+            purpose?: "working_capital" | "equipment" | "cash_gap" | "expansion";
+            form_data?: Record<string, never>;
+        };
+        InfoResponse: {
+            answers?: Record<string, never>;
+            /** @default null */
+            comment: string | null;
+        };
+        SignCode: {
+            /** @description Код показывается в интерфейсе */
+            code: string;
+            /** Format: date-time */
+            expires_at: string;
+            document_hash: string;
+            simulated: boolean;
+        };
+        SignConfirm: {
+            code: string;
+        };
+        Event: {
+            id: number;
+            from_status?: string | null;
+            to_status: string;
+            /** @description client | analyst | system */
+            actor: string;
+            reason?: string | null;
+            comment?: string | null;
+            /** Format: date-time */
+            at: string;
+        };
+        Notification: {
+            id: number;
+            application_id?: number | null;
+            kind: string;
+            title: string;
+            body: string;
+            is_read: boolean;
+            /** Format: date-time */
+            created_at: string;
+        };
+        NotificationList: {
+            items: components["schemas"]["Notification"][];
+            unread_count: number;
+        };
+        QueueItem: {
+            id: number;
+            status: string;
+            company_name: string;
+            company_inn: string;
+            product_name: string;
+            amount: number;
+            term_months: number;
+            score?: number | null;
+            grade?: string | null;
+            /** Format: date-time */
+            submitted_at?: string | null;
+            /** Format: date-time */
+            status_changed_at: string;
+        };
+        Check: {
+            /** @description bki | egrul | fns */
+            source: string;
+            /** @description ok | failed */
+            status: string;
+            response?: Record<string, never> | null;
+            error?: string | null;
+            /** Format: date-time */
+            checked_at: string;
+        };
+        Scoring: {
+            score?: number | null;
+            grade?: string | null;
+            factors: components["schemas"]["Factor"][];
+            client_factors: string[];
+            stop_factors: components["schemas"]["Reason"][];
+            /** Format: date-time */
+            created_at: string;
+        };
+        Decision: {
+            id: number;
+            outcome: string;
+            decided_by: string;
+            analyst_id?: number | null;
+            is_counter: boolean;
+            amount?: number | null;
+            term_months?: number | null;
+            rate?: number | null;
+            monthly_payment?: number | null;
+            reasons: components["schemas"]["Reason"][];
+            comment?: string | null;
+            /** Format: date-time */
+            created_at: string;
+        };
+        AnalystCard: {
+            application: components["schemas"]["Application"];
+            completeness: components["schemas"]["Completeness"];
+            offer?: components["schemas"]["Offer"] | null;
+            info_request?: components["schemas"]["InfoRequest"] | null;
+            factors: components["schemas"]["Factor"][];
+            reasons: components["schemas"]["Reason"][];
+            decision_comment?: string | null;
+            signature?: components["schemas"]["SignatureInfo"] | null;
+            disbursement?: components["schemas"]["DisbursementInfo"] | null;
+            checks: components["schemas"]["Check"][];
+            scoring?: components["schemas"]["Scoring"] | null;
+            decisions: components["schemas"]["Decision"][];
+            info_requests: components["schemas"]["InfoRequest"][];
+            events: components["schemas"]["Event"][];
+        };
+        AnalystDecision: {
+            /**
+             * @description approve | change_terms | request_info | reject
+             * @enum {string}
+             */
+            action: "approve" | "change_terms" | "request_info" | "reject";
+            /**
+             * @description Обязателен для любого решения
+             * @default null
+             */
+            comment: string | null;
+            /** @description change_terms */
+            amount?: number;
+            /** @description change_terms */
+            term_months?: number;
+            /** @description request_info: коды полей анкеты */
+            fields?: string[];
         };
     };
     responses: {
-        /** @description Default error response */
+        /** @description Ошибка в формате problem+json */
         DEFAULT_ERROR: {
             headers: {
                 [name: string]: unknown;
             };
             content: {
-                "application/json": components["schemas"]["Problem"];
+                "application/problem+json": components["schemas"]["Problem"];
+            };
+        };
+        /** @description Unprocessable Entity */
+        UNPROCESSABLE_ENTITY: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/problem+json": components["schemas"]["Problem"];
             };
         };
     };

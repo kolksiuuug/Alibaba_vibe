@@ -4,6 +4,7 @@
 суммы, срока и долговой нагрузки.
 """
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
@@ -56,13 +57,22 @@ class _Pricing:
         return OfferTerms(amount, term, self.rate, payment, is_counter)
 
 
-def missing_fields(inp: ScoringInput, product: ProductTerms) -> tuple[str, ...]:
+def required_product_fields(product: ProductTerms) -> tuple[str, ...]:
+    """Поля анкеты, без которых продукт нельзя оценить (сверх общих полей заявки)."""
     required = list(product.required_fields)
     if product.requires_collateral:
         required += [f for f in COLLATERAL_FIELDS if f not in required]
     if product.requires_guarantee:
         required += [f for f in GUARANTEE_FIELDS if f not in required]
-    return tuple(f for f in required if not str(inp.form_data.get(f) or "").strip())
+    return tuple(required)
+
+
+def missing_product_fields(form: Mapping[str, Any], product: ProductTerms) -> tuple[str, ...]:
+    return tuple(f for f in required_product_fields(product) if not str(form.get(f) or "").strip())
+
+
+def missing_fields(inp: ScoringInput, product: ProductTerms) -> tuple[str, ...]:
+    return missing_product_fields(inp.form_data, product)
 
 
 def _term_extended(term: int, requested: int) -> Reason:

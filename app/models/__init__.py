@@ -11,6 +11,7 @@ from app.models.notification import Notification
 from app.models.pipeline_job import PipelineJob
 from app.models.product import Product
 from app.models.scoring_result import ScoringResult
+from app.models.signature import Signature
 from app.models.user import User
 
 __all__ = [
@@ -25,5 +26,6 @@ __all__ = [
     "PipelineJob",
     "Product",
     "ScoringResult",
+    "Signature",
     "User",
 ]

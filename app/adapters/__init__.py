@@ -4,6 +4,7 @@ from collections.abc import Mapping
 from typing import Any
 
 import httpx
+from flask import current_app
 
 from app.adapters.abs import HttpAbsAdapter
 from app.adapters.base import Adapters
@@ -33,3 +34,12 @@ def build_adapters(
         abs=HttpAbsAdapter(http("abs")),
         esign=HttpEsignAdapter(http("esign")),
     )
+
+
+def get_adapters() -> Adapters:
+    """Адаптеры текущего приложения; в тестах подменяются через app.extensions["adapters"]."""
+    adapters: Adapters | None = current_app.extensions.get("adapters")
+    if adapters is None:
+        adapters = build_adapters(current_app.config)
+        current_app.extensions["adapters"] = adapters
+    return adapters

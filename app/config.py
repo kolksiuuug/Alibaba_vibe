@@ -43,6 +43,11 @@ class BaseConfig:
     OPENAPI_JSON_PATH = "openapi.json"
     OPENAPI_SWAGGER_UI_PATH = "/docs"
     OPENAPI_SWAGGER_UI_URL = os.getenv("SWAGGER_UI_URL", "/swagger-ui/")
+    # Все операции требуют Bearer-токен, кроме помеченных security=[] (демо-вход, health)
+    API_SPEC_OPTIONS = {"security": [{"bearerAuth": []}]}
+
+    # Время жизни токена демо-входа, с
+    TOKEN_MAX_AGE_S = env_int("TOKEN_MAX_AGE_S", 86400)
 
     SEED_DIR = os.getenv("SEED_DIR", os.path.join(_PROJECT_ROOT, "seed"))
 

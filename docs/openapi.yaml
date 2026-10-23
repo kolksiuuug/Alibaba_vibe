@@ -1,124 +1,1596 @@
-components:
-  responses:
-    DEFAULT_ERROR:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-      description: Default error response
-  schemas:
-    Health:
-      properties:
-        status:
-          example: ok
-          type: string
-      required:
-      - status
-      type: object
-    PaginationMetadata:
-      properties:
-        first_page:
-          description: First available page number.
-          type: integer
-        last_page:
-          description: Last available page number.
-          type: integer
-        next_page:
-          description: Next page number.
-          type: integer
-        page:
-          description: Current page number.
-          type: integer
-        previous_page:
-          description: Previous page number.
-          type: integer
-        total:
-          description: Total number of items.
-          type: integer
-        total_pages:
-          description: Total number of pages.
-          type: integer
-      type: object
-    Problem:
-      properties:
-        code:
-          description: "\u041C\u0430\u0448\u0438\u043D\u043D\u044B\u0439 \u043A\u043E\
-            \u0434 \u043E\u0448\u0438\u0431\u043A\u0438"
-          type: string
-        detail:
-          description: "\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u043E\u0441\u0442\
-            \u0438 \u0434\u043B\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\
-            \u0442\u0435\u043B\u044F"
-          type: string
-        errors:
-          description: "\u041E\u0448\u0438\u0431\u043A\u0438 \u0432\u0430\u043B\u0438\
-            \u0434\u0430\u0446\u0438\u0438 \u043F\u043E \u043F\u043E\u043B\u044F\u043C"
-          type: object
-        instance:
-          description: "\u041F\u0443\u0442\u044C \u0437\u0430\u043F\u0440\u043E\u0441\
-            \u0430"
-          type: string
-        request_id:
-          description: "\u0418\u0434\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\
-            \u0442\u043E\u0440 \u0437\u0430\u043F\u0440\u043E\u0441\u0430 \u0434\u043B\
-            \u044F \u043F\u043E\u0438\u0441\u043A\u0430 \u0432 \u043B\u043E\u0433\u0430\
-            \u0445"
-          type: string
-        status:
-          description: "HTTP-\u0441\u0442\u0430\u0442\u0443\u0441"
-          type: integer
-        title:
-          description: "\u041A\u0440\u0430\u0442\u043A\u043E\u0435 \u043E\u043F\u0438\
-            \u0441\u0430\u043D\u0438\u0435 \u043D\u0430 \u0440\u0443\u0441\u0441\u043A\
-            \u043E\u043C"
-          type: string
-        type:
-          description: "URI \u0442\u0438\u043F\u0430 \u043E\u0448\u0438\u0431\u043A\
-            \u0438, \u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E\
-            \ about:blank"
-          type: string
-      type: object
-info:
-  title: "\u0423\u043C\u043D\u044B\u0439 \u043A\u0440\u0435\u0434\u0438\u0442\u043D\
-    \u044B\u0439 \u043A\u0430\u0431\u0438\u043D\u0435\u0442 \u043F\u0440\u0435\u0434\
-    \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u0442\u0435\u043B\u044F"
-  version: 1.0.0
 openapi: 3.0.3
+info:
+  title: Умный кредитный кабинет предпринимателя
+  version: 1.0.0
+tags:
+- name: health
+  description: Состояние сервиса
+- name: auth
+  description: Демо-вход и профиль
+- name: products
+  description: Продукты и калькулятор
+- name: applications
+  description: Заявки клиента
+- name: notifications
+  description: Уведомления
+- name: analyst
+  description: Аналитик
+security:
+- bearerAuth: []
 paths:
   /api/health:
     get:
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Health'
-          description: OK
         default:
           $ref: '#/components/responses/DEFAULT_ERROR'
-      summary: "\u041F\u0440\u043E\u0446\u0435\u0441\u0441 \u0436\u0438\u0432 (\u0437\
-        \u0430\u0432\u0438\u0441\u0438\u043C\u043E\u0441\u0442\u0438 \u043D\u0435\
-        \ \u043F\u0440\u043E\u0432\u0435\u0440\u044F\u044E\u0442\u0441\u044F)."
+      summary: Процесс жив (зависимости не проверяются).
       tags:
       - health
+      security: []
   /api/ready:
     get:
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Health'
-          description: OK
         default:
           $ref: '#/components/responses/DEFAULT_ERROR'
-      summary: "\u0421\u0435\u0440\u0432\u0438\u0441 \u0433\u043E\u0442\u043E\u0432\
-        \ \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u0442\u044C \u0437\u0430\u043F\
-        \u0440\u043E\u0441\u044B: \u0431\u0430\u0437\u0430 \u0434\u0430\u043D\u043D\
-        \u044B\u0445 \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u0430."
+      summary: 'Сервис готов принимать запросы: база данных доступна.'
       tags:
       - health
-tags:
-- description: "\u0421\u043E\u0441\u0442\u043E\u044F\u043D\u0438\u0435 \u0441\u0435\
-    \u0440\u0432\u0438\u0441\u0430"
-  name: health
+      security: []
+  /api/v1/auth/demo-profiles:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DemoProfile'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: 'Демо-профили для экрана входа: пять компаний и аналитик.'
+      tags:
+      - auth
+      security: []
+  /api/v1/auth/demo-login:
+    post:
+      responses:
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DemoLogin'
+      summary: Войти в демо-профиль и получить Bearer-токен.
+      tags:
+      - auth
+      security: []
+  /api/v1/me:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Текущий пользователь и его компания.
+      tags:
+      - auth
+  /api/v1/products:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Кредитные продукты со ставкой «от».
+      tags:
+      - products
+  /api/v1/products/recommend:
+    post:
+      responses:
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recommendation'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecommendRequest'
+      summary: 1–3 подходящих продукта с предварительной ставкой и ежемесячным платежом.
+      tags:
+      - products
+  /api/v1/calculator:
+    post:
+      responses:
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculatorResponse'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculatorRequest'
+      summary: Аннуитетный платёж и график. Ставка — annual_rate или ставка «от» продукта.
+      tags:
+      - products
+  /api/v1/applications:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApplicationSummary'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Заявки компании текущего клиента.
+      tags:
+      - applications
+    post:
+      responses:
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationDetail'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationCreate'
+      summary: Создать черновик. Данные компании подставляются автоматически.
+      tags:
+      - applications
+  /api/v1/applications/{application_id}:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationDetail'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: 'Карточка заявки: статус, этапы проверки, предложение, дозапрос, факторы
+        решения.'
+      tags:
+      - applications
+    patch:
+      responses:
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationDetail'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationPatch'
+      summary: Изменить черновик (условия и поля анкеты).
+      tags:
+      - applications
+    parameters:
+    - in: path
+      name: application_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  /api/v1/applications/{application_id}/submit:
+    post:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationDetail'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Отправить заявку на проверку. Повтор идемпотентен.
+      tags:
+      - applications
+    parameters:
+    - in: path
+      name: application_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  /api/v1/applications/{application_id}/cancel:
+    post:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationDetail'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Отменить черновик или заявку, по которой банк ждёт ответа.
+      tags:
+      - applications
+    parameters:
+    - in: path
+      name: application_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  /api/v1/applications/{application_id}/info-response:
+    post:
+      responses:
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationDetail'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InfoResponse'
+      summary: 'Ответить на дозапрос банка: заявка снова уходит на проверку.'
+      tags:
+      - applications
+    parameters:
+    - in: path
+      name: application_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  /api/v1/applications/{application_id}/offer/accept:
+    post:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationDetail'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Принять предложение банка.
+      tags:
+      - applications
+    parameters:
+    - in: path
+      name: application_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  /api/v1/applications/{application_id}/offer/decline:
+    post:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationDetail'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Отклонить предложение банка.
+      tags:
+      - applications
+    parameters:
+    - in: path
+      name: application_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  /api/v1/applications/{application_id}/sign/request-code:
+    post:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignCode'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: 'Получить код подписи. Симуляция: код показывается в интерфейсе, SMS
+        не отправляется.'
+      tags:
+      - applications
+    parameters:
+    - in: path
+      name: application_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  /api/v1/applications/{application_id}/sign/confirm:
+    post:
+      responses:
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationDetail'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignConfirm'
+      summary: Подписать договор кодом (симуляция ЭП). Дальше воркер выдаёт кредит.
+      tags:
+      - applications
+    parameters:
+    - in: path
+      name: application_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  /api/v1/applications/{application_id}/events:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Таймлайн переходов статуса.
+      tags:
+      - applications
+    parameters:
+    - in: path
+      name: application_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  /api/v1/notifications:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationList'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Последние уведомления пользователя и число непрочитанных.
+      tags:
+      - notifications
+  /api/v1/notifications/{notification_id}/read:
+    post:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Отметить уведомление прочитанным.
+      tags:
+      - notifications
+    parameters:
+    - in: path
+      name: notification_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  /api/v1/analyst/applications:
+    get:
+      parameters:
+      - in: query
+        name: status
+        description: draft | submitted | checking | info_requested | manual_review
+          | offer | accepted | signed | issued | rejected | declined | cancelled
+        schema:
+          type: string
+          default: null
+          nullable: true
+        required: false
+      responses:
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QueueItem'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Очередь заявок с фильтром по статусу (черновики не показываются).
+      tags:
+      - analyst
+  /api/v1/analyst/applications/{application_id}:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalystCard'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: 'Карточка: данные, проверки, скоринг по факторам, рекомендация движка,
+        журнал.'
+      tags:
+      - analyst
+    parameters:
+    - in: path
+      name: application_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  /api/v1/analyst/applications/{application_id}/decision:
+    post:
+      responses:
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalystCard'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalystDecision'
+      summary: 'Решение по ручному рассмотрению: одобрить, изменить условия, дозапрос,
+        отказ.'
+      tags:
+      - analyst
+    parameters:
+    - in: path
+      name: application_id
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          description: URI типа ошибки, по умолчанию about:blank
+        title:
+          type: string
+          description: Краткое описание на русском
+        status:
+          type: integer
+          description: HTTP-статус
+        detail:
+          type: string
+          description: Подробности для пользователя
+        instance:
+          type: string
+          description: Путь запроса
+        code:
+          type: string
+          description: Машинный код ошибки
+        errors:
+          type: object
+          description: Ошибки валидации по полям
+        request_id:
+          type: string
+          description: Идентификатор запроса для поиска в логах
+    PaginationMetadata:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of items.
+        total_pages:
+          type: integer
+          description: Total number of pages.
+        first_page:
+          type: integer
+          description: First available page number.
+        last_page:
+          type: integer
+          description: Last available page number.
+        page:
+          type: integer
+          description: Current page number.
+        previous_page:
+          type: integer
+          description: Previous page number.
+        next_page:
+          type: integer
+          description: Next page number.
+    Health:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+      required:
+      - status
+    DemoProfile:
+      type: object
+      properties:
+        login:
+          type: string
+        role:
+          type: string
+        display_name:
+          type: string
+        demo_hint:
+          type: string
+          nullable: true
+        company_name:
+          type: string
+          nullable: true
+      required:
+      - display_name
+      - login
+      - role
+    DemoLogin:
+      type: object
+      properties:
+        login:
+          type: string
+          minLength: 1
+          maxLength: 64
+      required:
+      - login
+    TurnoverMonth:
+      type: object
+      properties:
+        month:
+          type: string
+          example: 2026-09
+        amount:
+          type: integer
+      required:
+      - amount
+      - month
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        kind:
+          type: string
+          description: ip | llc
+        inn:
+          type: string
+        ogrn:
+          type: string
+        okved:
+          type: string
+        okved_name:
+          type: string
+        registered_at:
+          type: string
+          format: date
+        region:
+          type: string
+        director_name:
+          type: string
+        monthly_turnover:
+          type: array
+          items:
+            $ref: '#/components/schemas/TurnoverMonth'
+      required:
+      - director_name
+      - id
+      - inn
+      - kind
+      - monthly_turnover
+      - name
+      - ogrn
+      - okved
+      - okved_name
+      - region
+      - registered_at
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+        role:
+          type: string
+          description: client | analyst
+        display_name:
+          type: string
+        demo_hint:
+          type: string
+          nullable: true
+        company:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/Company'
+      required:
+      - display_name
+      - id
+      - login
+      - role
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+      - token
+      - user
+    LabelledField:
+      type: object
+      properties:
+        code:
+          type: string
+        label:
+          type: string
+      required:
+      - code
+      - label
+    Product:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        purposes:
+          type: array
+          items:
+            type: string
+        min_amount:
+          type: integer
+        max_amount:
+          type: integer
+        min_term_months:
+          type: integer
+        max_term_months:
+          type: integer
+        rate_spread:
+          type: number
+        base_rate:
+          type: number
+          description: 'Ставка «от»: ключевая ставка + спред продукта'
+        requires_collateral:
+          type: boolean
+        requires_guarantee:
+          type: boolean
+        required_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelledField'
+      required:
+      - base_rate
+      - code
+      - description
+      - max_amount
+      - max_term_months
+      - min_amount
+      - min_term_months
+      - name
+      - purposes
+      - rate_spread
+      - required_fields
+      - requires_collateral
+      - requires_guarantee
+    RecommendRequest:
+      type: object
+      properties:
+        purpose:
+          type: string
+          enum:
+          - working_capital
+          - equipment
+          - cash_gap
+          - expansion
+        amount:
+          type: integer
+          minimum: 1
+        term_months:
+          type: integer
+          minimum: 1
+          maximum: 120
+      required:
+      - amount
+      - purpose
+      - term_months
+    Recommendation:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/Product'
+        amount:
+          type: integer
+        term_months:
+          type: integer
+        rate:
+          type: number
+        monthly_payment:
+          type: number
+        fits:
+          type: boolean
+          description: Сумма и срок подходят продукту
+        notes:
+          type: array
+          items:
+            type: string
+      required:
+      - amount
+      - fits
+      - monthly_payment
+      - notes
+      - product
+      - rate
+      - term_months
+    CalculatorRequest:
+      type: object
+      properties:
+        amount:
+          type: integer
+          minimum: 1
+        term_months:
+          type: integer
+          minimum: 1
+          maximum: 120
+        product_code:
+          type: string
+        annual_rate:
+          type: number
+          minimum: 0.0
+          maximum: 100.0
+      required:
+      - amount
+      - term_months
+    ScheduleRow:
+      type: object
+      properties:
+        number:
+          type: integer
+        payment:
+          type: number
+        principal:
+          type: number
+        interest:
+          type: number
+        balance:
+          type: number
+      required:
+      - balance
+      - interest
+      - number
+      - payment
+      - principal
+    CalculatorResponse:
+      type: object
+      properties:
+        amount:
+          type: integer
+        term_months:
+          type: integer
+        annual_rate:
+          type: number
+        monthly_payment:
+          type: number
+        total_payment:
+          type: number
+        overpayment:
+          type: number
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduleRow'
+      required:
+      - amount
+      - annual_rate
+      - monthly_payment
+      - overpayment
+      - schedule
+      - term_months
+      - total_payment
+    ProductBrief:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        requires_collateral:
+          type: boolean
+        requires_guarantee:
+          type: boolean
+      required:
+      - code
+      - name
+      - requires_collateral
+      - requires_guarantee
+    ApplicationSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          description: draft | submitted | checking | info_requested | manual_review
+            | offer | accepted | signed | issued | rejected | declined | cancelled
+        product:
+          $ref: '#/components/schemas/ProductBrief'
+        amount:
+          type: integer
+        term_months:
+          type: integer
+        purpose:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        status_changed_at:
+          type: string
+          format: date-time
+      required:
+      - amount
+      - created_at
+      - id
+      - product
+      - purpose
+      - status
+      - status_changed_at
+      - term_months
+    ApplicationCreate:
+      type: object
+      properties:
+        product_code:
+          type: string
+        amount:
+          type: integer
+          minimum: 1
+        term_months:
+          type: integer
+          minimum: 1
+          maximum: 120
+        purpose:
+          type: string
+          enum:
+          - working_capital
+          - equipment
+          - cash_gap
+          - expansion
+        form_data:
+          type: object
+      required:
+      - amount
+      - product_code
+      - purpose
+      - term_months
+    Step:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        state:
+          type: string
+          description: pending | running | done | failed
+        started_at:
+          type: string
+        finished_at:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - state
+    Application:
+      type: object
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          description: draft | submitted | checking | info_requested | manual_review
+            | offer | accepted | signed | issued | rejected | declined | cancelled
+        product:
+          $ref: '#/components/schemas/ProductBrief'
+        amount:
+          type: integer
+        term_months:
+          type: integer
+        purpose:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        status_changed_at:
+          type: string
+          format: date-time
+        company:
+          $ref: '#/components/schemas/Company'
+        form_data:
+          type: object
+        pipeline_steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/Step'
+        submitted_at:
+          type: string
+          format: date-time
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+      required:
+      - amount
+      - company
+      - created_at
+      - form_data
+      - id
+      - pipeline_steps
+      - product
+      - purpose
+      - status
+      - status_changed_at
+      - term_months
+      - updated_at
+    Completeness:
+      type: object
+      properties:
+        ready_to_submit:
+          type: boolean
+        missing_required:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelledField'
+        missing_for_product:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelledField'
+      required:
+      - missing_for_product
+      - missing_required
+      - ready_to_submit
+    Reason:
+      type: object
+      properties:
+        code:
+          type: string
+        text:
+          type: string
+      required:
+      - code
+      - text
+    Offer:
+      type: object
+      properties:
+        amount:
+          type: integer
+        term_months:
+          type: integer
+        rate:
+          type: number
+        monthly_payment:
+          type: number
+        is_counter:
+          type: boolean
+        decided_by:
+          type: string
+          description: engine | analyst
+        requested_amount:
+          type: integer
+        requested_term_months:
+          type: integer
+        total_payment:
+          type: number
+        overpayment:
+          type: number
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reason'
+        comment:
+          type: string
+          nullable: true
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduleRow'
+      required:
+      - amount
+      - decided_by
+      - is_counter
+      - monthly_payment
+      - overpayment
+      - rate
+      - reasons
+      - requested_amount
+      - requested_term_months
+      - schedule
+      - term_months
+      - total_payment
+    InfoRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        requested_by:
+          type: string
+          description: engine | analyst
+        message:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelledField'
+        response:
+          type: object
+          nullable: true
+        responded_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - created_at
+      - fields
+      - id
+      - message
+      - requested_by
+    Factor:
+      type: object
+      properties:
+        code:
+          type: string
+        value:
+          type: number
+        points:
+          type: integer
+        max_points:
+          type: integer
+        explanation_ru:
+          type: string
+        impact:
+          type: string
+          description: positive | neutral | negative
+      required:
+      - code
+      - explanation_ru
+      - impact
+      - max_points
+      - points
+      - value
+    SignatureInfo:
+      type: object
+      properties:
+        signed_at:
+          type: string
+          format: date-time
+          nullable: true
+        signature_reference:
+          type: string
+          nullable: true
+    DisbursementInfo:
+      type: object
+      properties:
+        amount:
+          type: integer
+        abs_reference:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - abs_reference
+      - amount
+      - created_at
+    ApplicationDetail:
+      type: object
+      properties:
+        application:
+          $ref: '#/components/schemas/Application'
+        completeness:
+          $ref: '#/components/schemas/Completeness'
+        offer:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/Offer'
+        info_request:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/InfoRequest'
+        factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Factor'
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reason'
+        decision_comment:
+          type: string
+          nullable: true
+        signature:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/SignatureInfo'
+        disbursement:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/DisbursementInfo'
+      required:
+      - application
+      - completeness
+      - factors
+      - reasons
+    ApplicationPatch:
+      type: object
+      properties:
+        product_code:
+          type: string
+        amount:
+          type: integer
+          minimum: 1
+        term_months:
+          type: integer
+          minimum: 1
+          maximum: 120
+        purpose:
+          type: string
+          enum:
+          - working_capital
+          - equipment
+          - cash_gap
+          - expansion
+        form_data:
+          type: object
+    InfoResponse:
+      type: object
+      properties:
+        answers:
+          type: object
+        comment:
+          type: string
+          default: null
+          nullable: true
+    SignCode:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Код показывается в интерфейсе
+        expires_at:
+          type: string
+          format: date-time
+        document_hash:
+          type: string
+        simulated:
+          type: boolean
+      required:
+      - code
+      - document_hash
+      - expires_at
+      - simulated
+    SignConfirm:
+      type: object
+      properties:
+        code:
+          type: string
+          pattern: ^\s*\d{6}\s*$
+      required:
+      - code
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+        from_status:
+          type: string
+          nullable: true
+        to_status:
+          type: string
+        actor:
+          type: string
+          description: client | analyst | system
+        reason:
+          type: string
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+        at:
+          type: string
+          format: date-time
+      required:
+      - actor
+      - at
+      - id
+      - to_status
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+        application_id:
+          type: integer
+          nullable: true
+        kind:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - body
+      - created_at
+      - id
+      - is_read
+      - kind
+      - title
+    NotificationList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+        unread_count:
+          type: integer
+      required:
+      - items
+      - unread_count
+    QueueItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+        company_name:
+          type: string
+        company_inn:
+          type: string
+        product_name:
+          type: string
+        amount:
+          type: integer
+        term_months:
+          type: integer
+        score:
+          type: integer
+          nullable: true
+        grade:
+          type: string
+          nullable: true
+        submitted_at:
+          type: string
+          format: date-time
+          nullable: true
+        status_changed_at:
+          type: string
+          format: date-time
+      required:
+      - amount
+      - company_inn
+      - company_name
+      - id
+      - product_name
+      - status
+      - status_changed_at
+      - term_months
+    Check:
+      type: object
+      properties:
+        source:
+          type: string
+          description: bki | egrul | fns
+        status:
+          type: string
+          description: ok | failed
+        response:
+          type: object
+          nullable: true
+        error:
+          type: string
+          nullable: true
+        checked_at:
+          type: string
+          format: date-time
+      required:
+      - checked_at
+      - source
+      - status
+    Scoring:
+      type: object
+      properties:
+        score:
+          type: integer
+          nullable: true
+        grade:
+          type: string
+          nullable: true
+        factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Factor'
+        client_factors:
+          type: array
+          items:
+            type: string
+        stop_factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reason'
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - client_factors
+      - created_at
+      - factors
+      - stop_factors
+    Decision:
+      type: object
+      properties:
+        id:
+          type: integer
+        outcome:
+          type: string
+        decided_by:
+          type: string
+        analyst_id:
+          type: integer
+          nullable: true
+        is_counter:
+          type: boolean
+        amount:
+          type: integer
+          nullable: true
+        term_months:
+          type: integer
+          nullable: true
+        rate:
+          type: number
+          nullable: true
+        monthly_payment:
+          type: number
+          nullable: true
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reason'
+        comment:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - created_at
+      - decided_by
+      - id
+      - is_counter
+      - outcome
+      - reasons
+    AnalystCard:
+      type: object
+      properties:
+        application:
+          $ref: '#/components/schemas/Application'
+        completeness:
+          $ref: '#/components/schemas/Completeness'
+        offer:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/Offer'
+        info_request:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/InfoRequest'
+        factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Factor'
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reason'
+        decision_comment:
+          type: string
+          nullable: true
+        signature:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/SignatureInfo'
+        disbursement:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/DisbursementInfo'
+        checks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Check'
+        scoring:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/Scoring'
+        decisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Decision'
+        info_requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfoRequest'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+      required:
+      - application
+      - checks
+      - completeness
+      - decisions
+      - events
+      - factors
+      - info_requests
+      - reasons
+    AnalystDecision:
+      type: object
+      properties:
+        action:
+          type: string
+          enum:
+          - approve
+          - change_terms
+          - request_info
+          - reject
+          description: approve | change_terms | request_info | reject
+        comment:
+          type: string
+          default: null
+          description: Обязателен для любого решения
+          nullable: true
+        amount:
+          type: integer
+          minimum: 1
+          description: change_terms
+        term_months:
+          type: integer
+          minimum: 1
+          maximum: 120
+          description: change_terms
+        fields:
+          type: array
+          description: 'request_info: коды полей анкеты'
+          items:
+            type: string
+      required:
+      - action
+  responses:
+    DEFAULT_ERROR:
+      description: Ошибка в формате problem+json
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    UNPROCESSABLE_ENTITY:
+      description: Unprocessable Entity
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

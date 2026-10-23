@@ -23,7 +23,7 @@ seed:
 	$(COMPOSE) run --rm app flask seed --reset
 
 openapi:
-	$(COMPOSE) run --rm --build -v "$(CURDIR)/docs:/app/docs" app flask openapi write --format=yaml docs/openapi.yaml
+	$(COMPOSE) run --rm --build --no-deps -v "$(CURDIR)/docs:/app/docs" app flask export-openapi docs/openapi.yaml
 	cd frontend && npm run gen:api
 
 lock:
