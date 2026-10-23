@@ -1,0 +1,7 @@
+{
+  "0044385397": {"tax_debt": 0, "late_payments_12m": 0, "tax_regime": "ОСН", "employees": 34},
+  "0054949500": {"tax_debt": 0, "late_payments_12m": 0, "tax_regime": "ОСН", "employees": 21},
+  "002404396418": {"tax_debt": 0, "late_payments_12m": 0, "tax_regime": "УСН", "employees": 6},
+  "0089935844": {"tax_debt": 0, "late_payments_12m": 1, "tax_regime": "УСН", "employees": 14},
+  "0031059928": {"tax_debt": 0, "late_payments_12m": 0, "tax_regime": "ОСН", "employees": 18}
+}

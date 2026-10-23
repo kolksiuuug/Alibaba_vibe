@@ -1,0 +1,37 @@
+{
+  "0044385397": {
+    "active_loans": 1,
+    "monthly_payments": 150000,
+    "current_overdue_days": 0,
+    "max_overdue_days_24m": 0,
+    "overdue_count_24m": 0
+  },
+  "0054949500": {
+    "active_loans": 2,
+    "monthly_payments": 250000,
+    "current_overdue_days": 0,
+    "max_overdue_days_24m": 0,
+    "overdue_count_24m": 0
+  },
+  "002404396418": {
+    "active_loans": 1,
+    "monthly_payments": 60000,
+    "current_overdue_days": 0,
+    "max_overdue_days_24m": 0,
+    "overdue_count_24m": 0
+  },
+  "0089935844": {
+    "active_loans": 2,
+    "monthly_payments": 120000,
+    "current_overdue_days": 0,
+    "max_overdue_days_24m": 15,
+    "overdue_count_24m": 1
+  },
+  "0031059928": {
+    "active_loans": 2,
+    "monthly_payments": 200000,
+    "current_overdue_days": 120,
+    "max_overdue_days_24m": 120,
+    "overdue_count_24m": 3
+  }
+}
