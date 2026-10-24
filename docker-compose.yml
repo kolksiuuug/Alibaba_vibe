@@ -2,12 +2,9 @@
 # Все переменные имеют значения по умолчанию, файл .env не нужен.
 name: credit-conveyor
 
-# app и worker собираются из одного Dockerfile (слои общие из кэша).
-# У каждого свой тег: общий тег при параллельной сборке даёт конфликт "already exists".
+# Общие настройки app и worker. Образ собирается один раз (сервис app), worker его переиспользует:
+# параллельная сборка одного Dockerfile двумя сервисами давала сбои BuildKit/containerd.
 x-backend: &backend
-  build:
-    context: .
-    dockerfile: Dockerfile
   environment:
     APP_CONFIG: ${APP_CONFIG:-prod}
     SECRET_KEY: ${SECRET_KEY:-demo-only-secret-change-me}
@@ -44,6 +41,9 @@ services:
 
   app:
     <<: *backend
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: credit-conveyor-app:1.0.0
     command: ["serve"]
     depends_on:
@@ -58,7 +58,8 @@ services:
 
   worker:
     <<: *backend
-    image: credit-conveyor-worker:1.0.0
+    image: credit-conveyor-app:1.0.0
+    pull_policy: never
     command: ["flask", "pipeline-worker"]
     depends_on:
       db:

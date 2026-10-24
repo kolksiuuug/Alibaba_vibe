@@ -178,5 +178,6 @@ postman/        коллекция запросов и её генератор
 | `ports are not available … 8080` | порт занят другой программой: `NGINX_PORT=8088 docker compose up --build` |
 | `app` долго не становится `healthy` | `docker compose logs app`: при первом старте он ждёт БД и применяет миграции |
 | нужна чистая база | `docker compose down -v`, затем `docker compose up --build` |
+| сборка упала с `parent snapshot … does not exist` | разовый сбой кэша Docker Desktop: повторите `docker compose up --build`, при повторении — `docker builder prune` |
 | нет `make` | команды из таблицы выше выполняются напрямую |
 | `npx playwright install` не может скачать браузер | `E2E_BROWSER_CHANNEL=msedge` (или `chrome`) — Playwright возьмёт установленный |
