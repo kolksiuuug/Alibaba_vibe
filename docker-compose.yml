@@ -12,6 +12,7 @@ x-backend: &backend
     APP_CONFIG: ${APP_CONFIG:-prod}
     SECRET_KEY: ${SECRET_KEY:-demo-only-secret-change-me}
     LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    TOKEN_MAX_AGE_S: ${TOKEN_MAX_AGE_S:-86400}
     DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-credit}:${POSTGRES_PASSWORD:-credit}@db:5432/${POSTGRES_DB:-credit}
     TEST_DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-credit}:${POSTGRES_PASSWORD:-credit}@db:5432/${POSTGRES_DB:-credit}_test
     MOCKS_BASE_URL: http://mocks:8001
