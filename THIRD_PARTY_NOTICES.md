@@ -8,7 +8,7 @@
 
 | Пакет | Версия | Лицензия | Назначение |
 | --- | --- | --- | --- |
-| Flask | 3.1.2 | BSD-3-Clause | веб-фреймворк |
+| Flask | 3.1.3 | BSD-3-Clause | веб-фреймворк |
 | gunicorn | 23.0.0 | MIT | WSGI-сервер |
 | Flask-SQLAlchemy | 3.1.1 | BSD-3-Clause | интеграция SQLAlchemy |
 | SQLAlchemy | 2.0.32 | MIT | ORM |
@@ -18,7 +18,7 @@
 | marshmallow | 3.26.2 | MIT | схемы и валидация |
 | apispec | 6.6.1 | MIT | генерация OpenAPI |
 | httpx | 0.27.0 | BSD-3-Clause | HTTP-клиент адаптеров |
-| python-dotenv | 1.0.1 | BSD-3-Clause | загрузка `.env` |
+| python-dotenv | 1.2.2 | BSD-3-Clause | загрузка `.env` |
 | PyYAML | 6.0.2 | MIT | конфиг скоринга, экспорт OpenAPI в YAML |
 | Faker | 40.43.0 | MIT | генератор синтетических компаний `seed/generate.py` (ФИО, слова) |
 | pytest | 8.3.3 | MIT | тесты |
@@ -28,7 +28,7 @@
 
 ## Моки: образ `mocks`
 
-Flask 3.1.2 (BSD-3-Clause) и gunicorn 23.0.0 (MIT) с теми же транзитивными зависимостями Flask.
+Flask 3.1.3 (BSD-3-Clause) и gunicorn 23.0.0 (MIT) с теми же транзитивными зависимостями Flask.
 
 ## Инструменты разработки (в образы не попадают)
 

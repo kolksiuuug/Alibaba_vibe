@@ -63,7 +63,7 @@
 
 | Слой | Технологии |
 | --- | --- |
-| Backend API | Python 3.12, Flask 3.1.2, Gunicorn 23.0.0, Flask-SQLAlchemy 3.1.1, SQLAlchemy 2.0.32, Flask-Migrate 4.1.0 (Alembic), psycopg2-binary 2.9.9, flask-smorest 0.47.0, marshmallow 3.26.2 (0.47.0 требует ≥3.24.1), apispec 6.6.1, httpx 0.27.0, python-dotenv 1.0.1 |
+| Backend API | Python 3.12, Flask 3.1.3, Gunicorn 23.0.0, Flask-SQLAlchemy 3.1.1, SQLAlchemy 2.0.32, Flask-Migrate 4.1.0 (Alembic), psycopg2-binary 2.9.9, flask-smorest 0.47.0, marshmallow 3.26.2 (0.47.0 требует ≥3.24.1), apispec 6.6.1, httpx 0.27.0, python-dotenv 1.2.2 |
 | Воркер конвейера | тот же образ, команда `flask pipeline-worker`; очередь — таблица `pipeline_jobs` в PostgreSQL |
 | БД | PostgreSQL 16 |
 | Моки | отдельный контейнер `mocks` на Flask, данные из `mocks/data/*.json` |
